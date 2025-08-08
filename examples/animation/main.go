@@ -5,7 +5,7 @@ import (
 	_ "image/png"
 	_ "image/jpeg"
 	"image/color"
-	"math"
+	//"math"
 	"log"
 	"os"
 
@@ -38,24 +38,37 @@ func (g *Game) Update() error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
+    // Fill background
     screen.Fill(color.RGBA{R: 211, G: 211, B: 211, A: 255})
-    op := &ebiten.DrawImageOptions{}
 
-    // Center the sprite
-    op.GeoM.Translate(-float64(frameWidth)/2, -float64(frameHeight)/2)
-    posX := float64(screenWidth) * 0.4
-    posY := float64(screenHeight) * 0.85
-    op.GeoM.Translate(posX, posY)
-
-    // Draw background
+    // Draw background image
     bgSubImage := backgroundImage.SubImage(image.Rect(0, 0, screenWidth, screenHeight)).(*ebiten.Image)
     screen.DrawImage(bgSubImage, &ebiten.DrawImageOptions{})
 
+    // Calculate current frame index
     i := (g.count / 5) % frameCount
-    // Draw sprite
-    sx, sy := frameOX+i*frameWidth, frameOY
-    y := int(math.Round(posY))
-    spriteSubImage := runnerImage.SubImage(image.Rect(sx, y, sx+frameWidth, sy)).(*ebiten.Image)
+
+    // Calculate sprite sheet position
+    sx := frameOX + i*frameWidth
+    sy := frameOY
+
+    // Calculate sprite position on screen
+    posX := float64(screenWidth) * 0.4
+    posY := float64(screenHeight) * 0.85
+
+    // Prepare drawing options
+    op := &ebiten.DrawImageOptions{}
+
+    // Center the sprite at (posX, posY)
+    op.GeoM.Reset()
+    op.GeoM.Translate(-float64(frameWidth)/2, -float64(frameHeight)/2)
+    op.GeoM.Translate(posX, posY)
+
+    // Define sprite crop rectangle
+    spriteRect := image.Rect(sx, sy, sx+frameWidth, sy+frameHeight)
+    spriteSubImage := runnerImage.SubImage(spriteRect).(*ebiten.Image)
+
+    // Draw sprite at the position
     screen.DrawImage(spriteSubImage, op)
 }
 
