@@ -40,14 +40,12 @@ func (g *Game) Update() error {
 func (g *Game) Draw(screen *ebiten.Image) {
     screen.Fill(color.RGBA{R: 211, G: 211, B: 211, A: 255})
     op := &ebiten.DrawImageOptions{}
+
     // Center the sprite
     op.GeoM.Translate(-float64(frameWidth)/2, -float64(frameHeight)/2)
     posX := float64(screenWidth) * 0.4
     posY := float64(screenHeight) * 0.85
     op.GeoM.Translate(posX, posY)
-    // Optional: scale up for better visibility
-    //scaleFactor := 2.0 // adjust as needed
-    //op.GeoM.Scale(scaleFactor, scaleFactor)
 
     // Draw background
     bgSubImage := backgroundImage.SubImage(image.Rect(0, 0, screenWidth, screenHeight)).(*ebiten.Image)
@@ -56,7 +54,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
     i := (g.count / 5) % frameCount
     // Draw sprite
     sx, sy := frameOX+i*frameWidth, frameOY
-    y := int(math.Round(float64(0.8*screenHeight) + float64(frameHeight)))
+    y := int(math.Round(posY))
     spriteSubImage := runnerImage.SubImage(image.Rect(sx, y, sx+frameWidth, sy)).(*ebiten.Image)
     screen.DrawImage(spriteSubImage, op)
 }
