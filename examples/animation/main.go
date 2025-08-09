@@ -26,6 +26,9 @@ const (
 var (
 	runnerImage *ebiten.Image
 	backgroundImage *ebiten.Image
+
+    posX = float64(screenWidth) * 0.4
+    posY = float64(screenHeight) * 0.85
 )
 
 type Game struct {
@@ -34,6 +37,13 @@ type Game struct {
 
 func (g *Game) Update() error {
 	g.count++
+
+	if ebiten.IsKeyPressed(ebiten.KeyA) || ebiten.IsKeyPressed(ebiten.KeyArrowLeft) {
+    		posX -= 2
+    	} else if ebiten.IsKeyPressed(ebiten.KeyD) || ebiten.IsKeyPressed(ebiten.KeyArrowRight) {
+    		posX += 2
+    	}
+
 	return nil
 }
 
@@ -52,9 +62,6 @@ func (g *Game) Draw(screen *ebiten.Image) {
     sx := frameOX + i*frameWidth
     sy := frameOY
 
-    // Calculate sprite position on screen
-    posX := float64(screenWidth) * 0.4
-    posY := float64(screenHeight) * 0.85
 
     // Prepare drawing options
     op := &ebiten.DrawImageOptions{}
