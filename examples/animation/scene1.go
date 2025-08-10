@@ -90,7 +90,7 @@ func (s *Scene1) Update() error {
     a := (float64(screenHeight)*0.92 - float64(screenHeight)*0.65) / 0.25
     circleY = a* (s.t - 0.5)*(s.t - 0.5) + float64(screenHeight)*0.7
 
-    // Example: switch scene with 'S' key (optional)
+
      if posX > screenWidth {
          currentScene = &Scene2{}
          log.Println("Scene2 loaded")
