@@ -87,7 +87,7 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 	return screenWidth, screenHeight
 }
 
-func loadImage(path string) (*ebiten.Image, error) {
+func LoadImage(path string) (*ebiten.Image, error) {
     file, err := os.Open(path)
     if err != nil {
         return nil, err
@@ -106,16 +106,16 @@ func main() {
     var err error
 
     ebiten.SetMaxTPS(20)
-	runnerImage, err = loadImage("kw1.png")
+	runnerImage, err = LoadImage("kw1.png")
     if err != nil {
         log.Fatal(err)
     }
 
-    backgroundImage1, err = loadImage("background.png")
+    backgroundImage1, err = LoadImage("background.png")
     if err != nil {
         log.Fatal(err)
     }
-    backgroundImage2, err = loadImage("background2.png")
+    backgroundImage2, err = LoadImage("background2.png")
     if err != nil {
         log.Fatal(err)
     }
