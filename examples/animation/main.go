@@ -82,34 +82,9 @@ func (g *Game) Update() error {
 func (g *Game) Draw(screen *ebiten.Image) {
     screen.Fill(color.RGBA{R: 211, G: 211, B: 211, A: 255})
 
-    // Draw background image
-    bgSubImage := backgroundImage1.SubImage(image.Rect(0, 0, screenWidth, screenHeight)).(*ebiten.Image)
-    screen.DrawImage(bgSubImage, &ebiten.DrawImageOptions{})
-
-    // Calculate current frame index
-    i := (g.count / 5) % frameCount
-
-    // Calculate sprite sheet position
-    sx := frameOX + i*frameWidth
-    sy := frameOY
-
-    // Prepare drawing options
-    op := &ebiten.DrawImageOptions{}
-
-    // Center the sprite at (posX, posY)
-    op.GeoM.Reset()
-    op.GeoM.Translate(-float64(frameWidth)/2, -float64(frameHeight)/2)
-    op.GeoM.Translate(posX, posY)
-
-    // Define sprite crop rectangle
-    spriteRect := image.Rect(sx, sy, sx+frameWidth, sy+frameHeight)
-    spriteSubImage := runnerImage.SubImage(spriteRect).(*ebiten.Image)
-
-    // Draw sprite at the position
-    screen.DrawImage(spriteSubImage, op)
-
-    bgSubImage = backgroundImage2.SubImage(image.Rect(0, 0, screenWidth, screenHeight)).(*ebiten.Image)
-    screen.DrawImage(bgSubImage, &ebiten.DrawImageOptions{})
+    drawBackground(screen, backgroundImage1)
+    drawSprite(g, screen)
+    drawBackground(screen, backgroundImage2)
 
     circleImage := createCircleImage(8, color.White)
     op2 := &ebiten.DrawImageOptions{}
@@ -119,6 +94,25 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 	return screenWidth, screenHeight
+}
+
+
+func drawBackground(screen *ebiten.Image, bg *ebiten.Image) {
+    subImg := bg.SubImage(image.Rect(0, 0, screenWidth, screenHeight)).(*ebiten.Image)
+    screen.DrawImage(subImg, &ebiten.DrawImageOptions{})
+}
+
+func drawSprite(g *Game, screen *ebiten.Image) {
+    i := (g.count / 5) % frameCount
+    sx := frameOX + i*frameWidth
+    sy := frameOY
+    spriteRect := image.Rect(sx, sy, sx+frameWidth, sy+frameHeight)
+    spriteSubImage := runnerImage.SubImage(spriteRect).(*ebiten.Image)
+    op := &ebiten.DrawImageOptions{}
+    op.GeoM.Reset()
+    op.GeoM.Translate(-float64(frameWidth)/2, -float64(frameHeight)/2)
+    op.GeoM.Translate(posX, posY)
+    screen.DrawImage(spriteSubImage, op)
 }
 
 func createCircleImage(radius int, col color.Color) *ebiten.Image {
