@@ -12,11 +12,27 @@ import (
     "github.com/hajimehoshi/ebiten/v2/audio/wav"
 )
 
+type BallScene interface {
+    GetT() float64
+    SetT(float64)
+    GetTDir() float64
+    SetTDir(float64)
+    GetCount() int
+}
+
 type Scene1 struct {
     count int
     t     float64
     tDir  float64
 }
+
+func (s *Scene1) GetT() float64 { return s.t }
+func (s *Scene1) SetT(val float64) { s.t = val }
+
+func (s *Scene1) GetTDir() float64 { return s.tDir }
+func (s *Scene1) SetTDir(val float64) { s.tDir = val }
+
+func (s *Scene1) GetCount() int { return s.count }
 
 const (
     screenWidth  = 474
@@ -85,27 +101,7 @@ func (s *Scene1) Update() error {
     s.count++
 
     moveSprite()
-
-    circleX += movement
-    if circleX > screenWidth || circleX < 0 {
-        movement *= -1
-    }
-
-    s.t += s.tDir * 0.04
-    if s.t > 1 {
-        s.t = 1
-        s.tDir = -s.tDir
-        player.Rewind()
-        player.Play()
-    } else if s.t < 0 {
-        s.t = 0
-        s.tDir = -s.tDir
-        player.Rewind()
-        player.Play()
-    }
-    a := (float64(screenHeight)*0.92 - float64(screenHeight)*0.65) / 0.25
-    circleY = a* (s.t - 0.5)*(s.t - 0.5) + float64(screenHeight)*0.7
-
+    moveBall(s, &circleX, &circleY)
 
      if posX > screenWidth {
          currentScene = &Scene2{}
@@ -127,6 +123,33 @@ func (s *Scene1) Draw(screen *ebiten.Image) {
     op2.GeoM.Translate(circleX-8, circleY-8)
     op2.GeoM.Scale(2, 2)
     screen.DrawImage(circleImage, op2)
+}
+
+func moveBall(s BallScene, circleX *float64, circleY *float64) {
+    *circleX += movement
+    if *circleX > float64(screenWidth) || *circleX < 0 {
+        movement *= -1
+    }
+
+    s.SetT(s.GetT() + s.GetTDir()*0.04)
+    t := s.GetT()
+
+    if t > 1 {
+        t = 1
+        s.SetT(t)
+        s.SetTDir(-s.GetTDir())
+        player.Rewind()
+        player.Play()
+    } else if t < 0 {
+        t = 0
+        s.SetT(t)
+        s.SetTDir(-s.GetTDir())
+        player.Rewind()
+        player.Play()
+    }
+
+    a := (float64(screenHeight)*0.92 - float64(screenHeight)*0.65) / 0.25
+    *circleY = a * (t - 0.5) * (t - 0.5) + float64(screenHeight)*0.7
 }
 
 func moveSprite() {

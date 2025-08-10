@@ -7,8 +7,6 @@ import (
 
 type Scene2 struct {
     count int
-    t     float64
-    tDir  float64
 }
 
 func (s *Scene2) Update() error {
