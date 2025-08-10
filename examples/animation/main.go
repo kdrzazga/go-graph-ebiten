@@ -78,17 +78,7 @@ func (g *Game) Layout(outsideW, outsideH int) (int, int) {
     return screenWidth * 2, screenHeight * 2
 }
 
-func (s *Scene1) GetT() float64 { return s.t }
-func (s *Scene1) SetT(val float64) { s.t = val }
-
-func (s *Scene1) GetTDir() float64 { return s.tDir }
-func (s *Scene1) SetTDir(val float64) { s.tDir = val }
-
-func (s *Scene1) GetCount() int { return s.count }
-
-
 func init() {
-    // Load assets here (replace with your actual image paths)
     var err error
     runnerImage, err = loadImage("kw1.png")
     if err != nil {

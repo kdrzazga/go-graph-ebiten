@@ -8,21 +8,11 @@ import (
     "github.com/hajimehoshi/ebiten/v2"
 )
 
-type BallScene interface {
-    GetT() float64
-    SetT(float64)
-    GetTDir() float64
-    SetTDir(float64)
-    GetCount() int
-}
-
 type Scene1 struct {
     count int
     t     float64
     tDir  float64
 }
-
-
 
 func (s *Scene1) Update() error {
     s.count++

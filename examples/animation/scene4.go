@@ -12,14 +12,6 @@ type Scene4 struct {
     tDir  float64
 }
 
-func (s *Scene4) GetT() float64 { return s.t }
-func (s *Scene4) SetT(val float64) { s.t = val }
-
-func (s *Scene4) GetTDir() float64 { return s.tDir }
-func (s *Scene4) SetTDir(val float64) { s.tDir = val }
-
-func (s *Scene4) GetCount() int { return s.count }
-
 func (s *Scene4) Update() error {
     s.count++
     moveSprite()
