@@ -34,37 +34,6 @@ func (s *Scene1) SetTDir(val float64) { s.tDir = val }
 
 func (s *Scene1) GetCount() int { return s.count }
 
-const (
-    screenWidth  = 474
-    screenHeight = 299
-
-    frameOX     = 0
-    frameOY     = 0
-    frameWidth  = 55
-    frameHeight = 71
-    frameCount  = 3
-)
-
-var (
-    runnerImage      *ebiten.Image
-    backgroundImage1 *ebiten.Image
-    backgroundImage2 *ebiten.Image
-    backgroundImage3 *ebiten.Image
-    newYork          *ebiten.Image
-    yieArKF          *ebiten.Image
-    sidney           *ebiten.Image
-
-    posX = float64(474) * 0.4
-    posY = float64(220 - 71/2)
-
-    circleX = float64(474) * 0.5
-    circleY = float64(299) * 0.8
-
-    movement = float64(3)
-
-    context *audio.Context
-    player  *audio.Player
-)
 
 func init() {
     // Load assets here (replace with your actual image paths)
