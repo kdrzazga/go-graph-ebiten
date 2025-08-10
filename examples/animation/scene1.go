@@ -52,6 +52,7 @@ var (
     backgroundImage3 *ebiten.Image
     newYork          *ebiten.Image
     yieArKF          *ebiten.Image
+    sidney           *ebiten.Image
 
     posX = float64(474) * 0.4
     posY = float64(220 - 71/2)
@@ -89,6 +90,10 @@ func init() {
         log.Fatal(err)
     }
     yieArKF, err = loadImage("yie-ar.png")
+    if err != nil {
+        log.Fatal(err)
+    }
+    sidney, err = loadImage("sidney.png")
     if err != nil {
         log.Fatal(err)
     }

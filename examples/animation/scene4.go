@@ -29,6 +29,11 @@ func (s *Scene4) Update() error {
          currentScene = &Scene3{}
          log.Println("Scene3 loaded")
          posX = float64(screenWidth - 3)
+     } else if posX > screenWidth {
+         currentScene = &Scene5{
+            }
+         log.Println("Scene5 loaded")
+         posX = float64(3)
      }
     return nil
 }

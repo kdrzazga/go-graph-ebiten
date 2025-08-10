@@ -14,10 +14,10 @@ type Scene interface {
 
 func main() {
     currentScene = &Scene1{
-                    count: 0,
-                    t:     0,
-                    tDir:  1,
-                }
+        count: 0,
+        t:     0,
+        tDir:  1,
+    }
 
     ebiten.SetWindowSize(screenWidth * 2, screenHeight * 2)
     ebiten.SetWindowTitle("Local Karate Minus")
