@@ -3,7 +3,6 @@ package main
 import (
     "image"
     _ "image/png"
-    _ "image/jpeg"
     "image/color"
     "log"
     "os"
@@ -12,6 +11,12 @@ import (
     "github.com/hajimehoshi/ebiten/v2/audio"
     "github.com/hajimehoshi/ebiten/v2/audio/wav"
 )
+
+type Scene1 struct {
+    count int
+    t     float64
+    tDir  float64
+}
 
 const (
     screenWidth  = 474
@@ -25,18 +30,18 @@ const (
 )
 
 var (
-    runnerImage       *ebiten.Image
-    backgroundImage1  *ebiten.Image
-    backgroundImage2  *ebiten.Image
-    backgroundImage3  *ebiten.Image
-    newYork  *ebiten.Image
-    yieArKF  *ebiten.Image
+    runnerImage      *ebiten.Image
+    backgroundImage1 *ebiten.Image
+    backgroundImage2 *ebiten.Image
+    backgroundImage3 *ebiten.Image
+    newYork          *ebiten.Image
+    yieArKF          *ebiten.Image
 
-    posX = float64(screenWidth) * 0.4
-    posY = float64(220 - frameHeight/2)
+    posX = float64(474) * 0.4
+    posY = float64(220 - 71/2)
 
-    circleX = float64(screenWidth) / 2
-    circleY = float64(screenHeight) * 0.8
+    circleX = float64(474) * 0.5
+    circleY = float64(299) * 0.8
 
     movement = float64(3)
 
@@ -44,24 +49,35 @@ var (
     player  *audio.Player
 )
 
-type Scene interface {
-    Update() error
-    Draw(screen *ebiten.Image)
-}
-
-var currentScene Scene
-
-type Scene1 struct {
-    count int
-    t     float64
-    tDir  float64
-}
-
-func moveSprite(){
-if ebiten.IsKeyPressed(ebiten.KeyA) || ebiten.IsKeyPressed(ebiten.KeyArrowLeft) {
-        posX -= 4
-    } else if ebiten.IsKeyPressed(ebiten.KeyD) || ebiten.IsKeyPressed(ebiten.KeyArrowRight) {
-        posX += 4
+func init() {
+    // Load assets here (replace with your actual image paths)
+    var err error
+    runnerImage, err = loadImage("kw1.png")
+    if err != nil {
+        log.Fatal(err)
+    }
+    backgroundImage1, err = loadImage("background.png")
+    if err != nil {
+        log.Fatal(err)
+    }
+    backgroundImage2, err = loadImage("background2.png")
+    if err != nil {
+        log.Fatal(err)
+    }
+    backgroundImage3, err = loadImage("background3.png")
+    if err != nil {
+        log.Fatal(err)
+    }
+    newYork, err = loadImage("ny.png")
+    if err != nil {
+        log.Fatal(err)
+    }
+    yieArKF, err = loadImage("yie-ar.png")
+    if err != nil {
+        log.Fatal(err)
+    }
+    if err := initAudio(); err != nil {
+        log.Fatal(err)
     }
 }
 
@@ -101,8 +117,7 @@ func (s *Scene1) Update() error {
 }
 
 func (s *Scene1) Draw(screen *ebiten.Image) {
-    screen.Fill(color.RGBA{R: 211, G: 211, B: 211, A: 255})
-
+    screen.Fill(color.RGBA{211, 211, 211, 255})
     drawBackground(screen, backgroundImage1)
     drawSprite(s.count, screen)
     drawBackground(screen, backgroundImage2)
@@ -110,124 +125,16 @@ func (s *Scene1) Draw(screen *ebiten.Image) {
     circleImage := createCircleImage(8, color.White)
     op2 := &ebiten.DrawImageOptions{}
     op2.GeoM.Translate(circleX-8, circleY-8)
+    op2.GeoM.Scale(2, 2)
     screen.DrawImage(circleImage, op2)
 }
 
-type Scene2 struct {
-    count int
-    t     float64
-    tDir  float64
-}
-
-type Scene3 struct {
-    count int
-}
-
-type Scene4 struct {
-    count int
-}
-
-func (s *Scene2) Update() error {
-    s.count++
-
-    moveSprite()
-
-     if posX < 0 {
-         currentScene = &Scene1{
-                count: 0,
-                t:     0,
-                tDir:  1,
-            }
-         log.Println("Scene1 loaded")
-         posX = float64(screenWidth - 3)
-     } else if posX > screenWidth {
-         currentScene = &Scene3{
-            }
-         log.Println("Scene3 loaded")
-         posX = float64(3)
-     }
-
-    return nil
-}
-
-func (s *Scene3) Update() error {
-    s.count++
-
-    moveSprite()
-
-     if posX < 0 {
-         currentScene = &Scene2{}
-         log.Println("Scene2 loaded")
-         posX = float64(screenWidth - 3)
-     } else if posX > screenWidth {
-         currentScene = &Scene4{
-            }
-         log.Println("Scene4 loaded")
-         posX = float64(3)
-     }
-
-    return nil
-}
-
-func (s *Scene4) Update() error {
-    s.count++
-
-    moveSprite()
-
-     if posX < 0 {
-         currentScene = &Scene3{}
-         log.Println("Scene3 loaded")
-         posX = float64(screenWidth - 3)
-     }
-
-    return nil
-}
-
-func (s *Scene2) Draw(screen *ebiten.Image) {
-    drawBackground(screen, backgroundImage3)
-    drawSprite(s.count, screen)
-}
-
-func (s *Scene3) Draw(screen *ebiten.Image) {
-    drawBackground(screen, newYork)
-    drawSprite(s.count, screen)
-}
-
-func (s *Scene4) Draw(screen *ebiten.Image) {
-    drawBackground(screen, yieArKF)
-    drawSprite(s.count, screen)
-}
-
-func drawBackground(screen *ebiten.Image, bg *ebiten.Image) {
-    subImg := bg.SubImage(image.Rect(0, 0, screenWidth, screenHeight)).(*ebiten.Image)
-    screen.DrawImage(subImg, &ebiten.DrawImageOptions{})
-}
-
-func drawSprite(count int, screen *ebiten.Image) {
-    i := (count / 5) % frameCount
-    sx := frameOX + i*frameWidth
-    sy := frameOY
-    spriteRect := image.Rect(sx, sy, sx+frameWidth, sy+frameHeight)
-    spriteSubImage := runnerImage.SubImage(spriteRect).(*ebiten.Image)
-    op := &ebiten.DrawImageOptions{}
-    op.GeoM.Reset()
-    op.GeoM.Translate(-float64(frameWidth)/2, -float64(frameHeight)/2)
-    op.GeoM.Translate(posX, posY)
-    screen.DrawImage(spriteSubImage, op)
-}
-
-func createCircleImage(radius int, col color.Color) *ebiten.Image {
-    size := radius * 2
-    img := ebiten.NewImage(size, size)
-    img.Fill(color.Transparent)
-    for y := -radius; y <= radius; y++ {
-        for x := -radius; x <= radius; x++ {
-            if x*x+y*y <= radius*radius {
-                img.Set(x+radius, y+radius, col)
-            }
-        }
+func moveSprite() {
+    if ebiten.IsKeyPressed(ebiten.KeyA) || ebiten.IsKeyPressed(ebiten.KeyArrowLeft) {
+        posX -= 4
+    } else if ebiten.IsKeyPressed(ebiten.KeyD) || ebiten.IsKeyPressed(ebiten.KeyArrowRight) {
+        posX += 4
     }
-    return img
 }
 
 func loadImage(path string) (*ebiten.Image, error) {
@@ -257,69 +164,40 @@ func initAudio() error {
     if err != nil {
         return err
     }
-    // defer f.Close()
     return nil
 }
 
-type GameWrapper struct{}
-
-func (g *GameWrapper) Update() error {
-    return currentScene.Update()
+func drawBackground(screen *ebiten.Image, bg *ebiten.Image) {
+    subImg := bg.SubImage(image.Rect(0, 0, 474, 299)).(*ebiten.Image)
+    op := &ebiten.DrawImageOptions{}
+    op.GeoM.Scale(2, 2)
+    screen.DrawImage(subImg, op)
 }
 
-func (g *GameWrapper) Draw(screen *ebiten.Image) {
-    currentScene.Draw(screen)
+func drawSprite(count int, screen *ebiten.Image) {
+    i := (count / 5) % 3
+    sx := i * 55
+    sy := 0
+    spriteRect := image.Rect(sx, sy, sx+55, sy+71)
+    spriteSubImage := runnerImage.SubImage(spriteRect).(*ebiten.Image)
+    op := &ebiten.DrawImageOptions{}
+    op.GeoM.Reset()
+    op.GeoM.Translate(-55/2, -71/2)
+    op.GeoM.Translate(posX, posY)
+    op.GeoM.Scale(2, 2)
+    screen.DrawImage(spriteSubImage, op)
 }
 
-func (g *GameWrapper) Layout(outsideW, outsideH int) (int, int) {
-    return screenWidth, screenHeight
-}
-
-func main() {
-    var err error
-
-    runnerImage, err = loadImage("kw1.png")
-    if err != nil {
-        log.Fatal(err)
+func createCircleImage(radius int, col color.Color) *ebiten.Image {
+    size := radius * 2
+    img := ebiten.NewImage(size, size)
+    img.Fill(color.Transparent)
+    for y := -radius; y <= radius; y++ {
+        for x := -radius; x <= radius; x++ {
+            if x*x+y*y <= radius*radius {
+                img.Set(x+radius, y+radius, col)
+            }
+        }
     }
-    backgroundImage1, err = loadImage("background.png")
-    if err != nil {
-        log.Fatal(err)
-    }
-    backgroundImage2, err = loadImage("background2.png")
-    if err != nil {
-        log.Fatal(err)
-    }
-
-    backgroundImage3, err = loadImage("background3.png")
-    if err != nil {
-        log.Fatal(err)
-    }
-
-    newYork, err = loadImage("ny.png")
-    if err != nil {
-        log.Fatal(err)
-    }
-
-    yieArKF, err = loadImage("yie-ar.png")
-    if err != nil {
-        log.Fatal(err)
-    }
-
-    if err := initAudio(); err != nil {
-        log.Fatal(err)
-    }
-
-    ebiten.SetWindowSize(screenWidth*2, screenHeight*2)
-    ebiten.SetWindowTitle("Local Karate Minus")
-
-    currentScene = &Scene1{
-        count: 0,
-        t:     0,
-        tDir:  1,
-    }
-
-    if err := ebiten.RunGame(&GameWrapper{}); err != nil {
-        log.Fatal(err)
-    }
+    return img
 }
