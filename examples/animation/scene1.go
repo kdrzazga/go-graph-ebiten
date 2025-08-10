@@ -28,6 +28,9 @@ var (
     runnerImage       *ebiten.Image
     backgroundImage1  *ebiten.Image
     backgroundImage2  *ebiten.Image
+    backgroundImage3  *ebiten.Image
+    newYork  *ebiten.Image
+    yieArKF  *ebiten.Image
 
     posX = float64(screenWidth) * 0.4
     posY = float64(220 - frameHeight/2)
@@ -54,14 +57,18 @@ type Scene1 struct {
     tDir  float64
 }
 
-func (s *Scene1) Update() error {
-    s.count++
-
-    if ebiten.IsKeyPressed(ebiten.KeyA) || ebiten.IsKeyPressed(ebiten.KeyArrowLeft) {
+func moveSprite(){
+if ebiten.IsKeyPressed(ebiten.KeyA) || ebiten.IsKeyPressed(ebiten.KeyArrowLeft) {
         posX -= 4
     } else if ebiten.IsKeyPressed(ebiten.KeyD) || ebiten.IsKeyPressed(ebiten.KeyArrowRight) {
         posX += 4
     }
+}
+
+func (s *Scene1) Update() error {
+    s.count++
+
+    moveSprite()
 
     circleX += movement
     if circleX > screenWidth || circleX < 0 {
@@ -84,9 +91,11 @@ func (s *Scene1) Update() error {
     circleY = a* (s.t - 0.5)*(s.t - 0.5) + float64(screenHeight)*0.7
 
     // Example: switch scene with 'S' key (optional)
-    // if ebiten.IsKeyPressed(ebiten.KeyS) {
-    //     currentScene = &Scene2{}
-    // }
+     if posX > screenWidth {
+         currentScene = &Scene2{}
+         log.Println("Scene2 loaded")
+         posX = float64(3)
+     }
 
     return nil
 }
@@ -102,6 +111,91 @@ func (s *Scene1) Draw(screen *ebiten.Image) {
     op2 := &ebiten.DrawImageOptions{}
     op2.GeoM.Translate(circleX-8, circleY-8)
     screen.DrawImage(circleImage, op2)
+}
+
+type Scene2 struct {
+    count int
+    t     float64
+    tDir  float64
+}
+
+type Scene3 struct {
+    count int
+}
+
+type Scene4 struct {
+    count int
+}
+
+func (s *Scene2) Update() error {
+    s.count++
+
+    moveSprite()
+
+     if posX < 0 {
+         currentScene = &Scene1{
+                count: 0,
+                t:     0,
+                tDir:  1,
+            }
+         log.Println("Scene1 loaded")
+         posX = float64(screenWidth - 3)
+     } else if posX > screenWidth {
+         currentScene = &Scene3{
+            }
+         log.Println("Scene3 loaded")
+         posX = float64(3)
+     }
+
+    return nil
+}
+
+func (s *Scene3) Update() error {
+    s.count++
+
+    moveSprite()
+
+     if posX < 0 {
+         currentScene = &Scene2{}
+         log.Println("Scene2 loaded")
+         posX = float64(screenWidth - 3)
+     } else if posX > screenWidth {
+         currentScene = &Scene4{
+            }
+         log.Println("Scene4 loaded")
+         posX = float64(3)
+     }
+
+    return nil
+}
+
+func (s *Scene4) Update() error {
+    s.count++
+
+    moveSprite()
+
+     if posX < 0 {
+         currentScene = &Scene3{}
+         log.Println("Scene3 loaded")
+         posX = float64(screenWidth - 3)
+     }
+
+    return nil
+}
+
+func (s *Scene2) Draw(screen *ebiten.Image) {
+    drawBackground(screen, backgroundImage3)
+    drawSprite(s.count, screen)
+}
+
+func (s *Scene3) Draw(screen *ebiten.Image) {
+    drawBackground(screen, newYork)
+    drawSprite(s.count, screen)
+}
+
+func (s *Scene4) Draw(screen *ebiten.Image) {
+    drawBackground(screen, yieArKF)
+    drawSprite(s.count, screen)
 }
 
 func drawBackground(screen *ebiten.Image, bg *ebiten.Image) {
@@ -193,6 +287,21 @@ func main() {
         log.Fatal(err)
     }
     backgroundImage2, err = loadImage("background2.png")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    backgroundImage3, err = loadImage("background3.png")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    newYork, err = loadImage("ny.png")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    yieArKF, err = loadImage("yie-ar.png")
     if err != nil {
         log.Fatal(err)
     }
