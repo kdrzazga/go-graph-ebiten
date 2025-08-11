@@ -87,7 +87,7 @@ func init() {
     if err != nil {
         log.Fatal(err)
     }
-    spiderImage, err = loadImage("spidey.png")
+    spiderImage, err = loadImage("spideyH.png")
     if err != nil {
         log.Fatal(err)
     }
