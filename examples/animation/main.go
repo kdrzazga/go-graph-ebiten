@@ -30,7 +30,7 @@ const (
 )
 
 var (
-    runnerImage      *ebiten.Image
+    karatekaImage    *ebiten.Image
     backgroundImage1 *ebiten.Image
     backgroundImage2 *ebiten.Image
     backgroundImage3 *ebiten.Image
@@ -38,8 +38,11 @@ var (
     yieArKF          *ebiten.Image
     sidney           *ebiten.Image
 
+    spiderImage     *ebiten.Image
+
     posX = float64(474) * 0.4
     posY = float64(220 - 71/2)
+    spiderX = float64(screenWidth)
 
     circleX = float64(474) * 0.5
     circleY = float64(299) * 0.8
@@ -80,7 +83,11 @@ func (g *Game) Layout(outsideW, outsideH int) (int, int) {
 
 func init() {
     var err error
-    runnerImage, err = loadImage("kw1.png")
+    karatekaImage, err = loadImage("kw1.png")
+    if err != nil {
+        log.Fatal(err)
+    }
+    spiderImage, err = loadImage("spidey.png")
     if err != nil {
         log.Fatal(err)
     }
@@ -190,7 +197,7 @@ func drawSprite(count int, screen *ebiten.Image) {
     sx := i * 55
     sy := 0
     spriteRect := image.Rect(sx, sy, sx+55, sy+71)
-    spriteSubImage := runnerImage.SubImage(spriteRect).(*ebiten.Image)
+    spriteSubImage := karatekaImage.SubImage(spriteRect).(*ebiten.Image)
     op := &ebiten.DrawImageOptions{}
     op.GeoM.Reset()
     op.GeoM.Translate(-55/2, -71/2)

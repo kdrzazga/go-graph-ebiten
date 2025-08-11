@@ -3,6 +3,7 @@ package main
 import (
     "github.com/hajimehoshi/ebiten/v2"
     "log"
+    "image"
     )
 
 type Scene5 struct {
@@ -12,6 +13,7 @@ type Scene5 struct {
 func (s *Scene5) Update() error {
     s.count++
     moveSprite()
+    moveSpider()
 
      if posX < 0 {
          currentScene = &Scene4{
@@ -25,7 +27,25 @@ func (s *Scene5) Update() error {
     return nil
 }
 
+func moveSpider(){
+    spiderX -= float64(1)
+}
+
+func drawSpider(count int, screen *ebiten.Image) {
+    frameHeight := 180
+    i := (count / 10) % 13
+    sx := 0
+    sy := i * frameHeight
+    spriteRect := image.Rect(sx, sy, sx+250, sy+frameHeight)
+    spriteSubImage := spiderImage.SubImage(spriteRect).(*ebiten.Image)
+    op := &ebiten.DrawImageOptions{}
+    op.GeoM.Reset()
+    op.GeoM.Translate(spiderX, 7*screenHeight /8)
+    screen.DrawImage(spriteSubImage, op)
+}
+
 func (s *Scene5) Draw(screen *ebiten.Image) {
     drawBackground(screen, sidney)
     drawSprite(s.count, screen)
+    drawSpider(s.count, screen)
 }
