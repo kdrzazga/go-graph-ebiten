@@ -70,7 +70,8 @@ func (g *Game) Update() error {
 			ebiten.SetFullscreen(true)
 		}
 	}
-	if runtime.GOOS != "js" && ebiten.IsKeyPressed(ebiten.KeyQ) {
+    playbackDone := player == nil || !player.IsPlaying()
+	if runtime.GOOS != "js" && (ebiten.IsKeyPressed(ebiten.KeyQ) || playbackDone ) {
 		return ebiten.Termination
 	}
 	return nil
@@ -104,13 +105,23 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	msg += fmt.Sprintf("Device scale factor: %0.2f\n", scale)
 
 	textOp := &text.DrawOptions{}
-	textOp.GeoM.Translate(50*scale, 50*scale)
+	textOp.GeoM.Translate(50*scale, 650*scale)
 	textOp.ColorScale.ScaleWithColor(color.White)
 	textOp.LineSpacing = 12 * ebiten.Monitor().DeviceScaleFactor() * 1.5
 	text.Draw(screen, msg, &text.GoTextFace{
 		Source: mplusFaceSource,
 		Size:   12 * ebiten.Monitor().DeviceScaleFactor(),
 	}, textOp)
+}
+
+func story() string {
+    return `Darkness had fallen over the realm.
+
+The land was cracked and scarred from endless war, as armies clashed and kingdoms tumbled into ruin. Above, the skies teemed with fire-breathing dragons, their wings blotting out the sun as they raided villages, leaving ash and ruin in their wake. Forests that once thrived with life now lay charred and silent, their trees reduced to ash and memory.
+
+In the shadows, goblins prowled through the wreckage, scavenging what little remained of a fallen world. Hope flickered faintly in the hearts of the survivors—if it was still there at all.
+
+Was there any salvation for this broken land? Or had the darkness claimed it forever?`
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
