@@ -11,6 +11,8 @@ import (
 	"runtime"
 
 	"github.com/hajimehoshi/ebiten/v2"
+    "github.com/hajimehoshi/ebiten/v2/audio"
+    "github.com/hajimehoshi/ebiten/v2/audio/wav"
 	"github.com/hajimehoshi/ebiten/v2/examples/resources/fonts"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/hajimehoshi/ebiten/v2/text/v2"
@@ -20,6 +22,8 @@ var (
     err           error
 	background    *ebiten.Image
 	mplusFaceSource *text.GoTextFaceSource
+    context *audio.Context
+    player  *audio.Player
 )
 
 func init() {
@@ -35,6 +39,23 @@ func init() {
 		log.Fatal(err)
 	}
 	mplusFaceSource = s
+}
+
+func initAudio() error {
+    context = audio.NewContext(44100)
+    f, err := os.Open("introduction.wav")
+    if err != nil {
+        return err
+    }
+    stream, err := wav.Decode(context, f)
+    if err != nil {
+        return err
+    }
+    player, err = audio.NewPlayer(context, stream)
+    if err != nil {
+        return err
+    }
+    return nil
 }
 
 type Game struct {
@@ -72,7 +93,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	screen.DrawImage(background, op)
 */
 	fw, fh := ebiten.Monitor().Size()
-	msg := "This is an example of the finest fullscreen.\n"
+	msg := ""
 	if runtime.GOOS == "js" {
 		msg += "Press F or touch the screen to enter fullscreen (again).\n"
 	} else {
@@ -98,6 +119,9 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 }
 
 func main() {
+    initAudio()
+    player.Play()
+
 	ebiten.SetFullscreen(true)
 	ebiten.SetWindowTitle("Fullscreen (Ebitengine Demo)")
 	if err := ebiten.RunGame(&Game{}); err != nil {
@@ -106,9 +130,9 @@ func main() {
 }
 
 func drawBackground(screen *ebiten.Image, bg *ebiten.Image) {
-    subImg := bg.SubImage(image.Rect(0, 0, 474, 299)).(*ebiten.Image)
+    subImg := bg.SubImage(image.Rect(0, 0, 512, 512)).(*ebiten.Image)
     op := &ebiten.DrawImageOptions{}
-    op.GeoM.Scale(2, 2)
+    //op.GeoM.Scale(2, 2)
     screen.DrawImage(subImg, op)
 }
 
