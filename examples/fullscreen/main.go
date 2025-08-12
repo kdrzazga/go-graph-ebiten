@@ -1,17 +1,3 @@
-// Copyright 2018 The Ebiten Authors
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package main
 
 import (
@@ -21,28 +7,26 @@ import (
 	"image/color"
 	_ "image/jpeg"
 	"log"
-	"math"
+	"os"
 	"runtime"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/examples/resources/fonts"
-	"github.com/hajimehoshi/ebiten/v2/examples/resources/images"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/hajimehoshi/ebiten/v2/text/v2"
 )
 
 var (
-	gophersImage    *ebiten.Image
+    err           error
+	background    *ebiten.Image
 	mplusFaceSource *text.GoTextFaceSource
 )
 
 func init() {
-	// Decode an image from the image file's byte slice.
-	img, _, err := image.Decode(bytes.NewReader(images.Gophers_jpg))
-	if err != nil {
-		log.Fatal(err)
-	}
-	gophersImage = ebiten.NewImageFromImage(img)
+    background, err = loadImage("broken-land.png")
+    if err != nil {
+        log.Fatal(err)
+    }
 }
 
 func init() {
@@ -74,17 +58,19 @@ func (g *Game) Update() error {
 func (g *Game) Draw(screen *ebiten.Image) {
 	scale := ebiten.Monitor().DeviceScaleFactor()
 
-	w, h := gophersImage.Bounds().Dx(), gophersImage.Bounds().Dy()
+	drawBackground(screen, background)
+/*
+	w, h := background.Bounds().Dx(), background.Bounds().Dy()
 	op := &ebiten.DrawImageOptions{}
 
 	op.GeoM.Translate(-float64(w)/2, -float64(h)/2)
 	op.GeoM.Scale(scale, scale)
-	op.GeoM.Rotate(float64(g.count%360) * 2 * math.Pi / 360)
+	op.GeoM.Rotate(float64(g.count%360) * 2 * math.Pi / 360)*/
 	sw, sh := screen.Bounds().Dx(), screen.Bounds().Dy()
-	op.GeoM.Translate(float64(sw)/2, float64(sh)/2)
+/*	op.GeoM.Translate(float64(sw)/2, float64(sh)/2)
 	op.Filter = ebiten.FilterLinear
-	screen.DrawImage(gophersImage, op)
-
+	screen.DrawImage(background, op)
+*/
 	fw, fh := ebiten.Monitor().Size()
 	msg := "This is an example of the finest fullscreen.\n"
 	if runtime.GOOS == "js" {
@@ -117,4 +103,24 @@ func main() {
 	if err := ebiten.RunGame(&Game{}); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func drawBackground(screen *ebiten.Image, bg *ebiten.Image) {
+    subImg := bg.SubImage(image.Rect(0, 0, 474, 299)).(*ebiten.Image)
+    op := &ebiten.DrawImageOptions{}
+    op.GeoM.Scale(2, 2)
+    screen.DrawImage(subImg, op)
+}
+
+func loadImage(path string) (*ebiten.Image, error) {
+    file, err := os.Open(path)
+    if err != nil {
+        return nil, err
+    }
+    defer file.Close()
+    img, _, err := image.Decode(file)
+    if err != nil {
+        return nil, err
+    }
+    return ebiten.NewImageFromImage(img), nil
 }
