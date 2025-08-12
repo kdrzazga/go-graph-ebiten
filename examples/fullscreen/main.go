@@ -24,6 +24,7 @@ var (
 	mplusFaceSource *text.GoTextFaceSource
     context *audio.Context
     player  *audio.Player
+    counter float64
 )
 
 func init() {
@@ -78,21 +79,11 @@ func (g *Game) Update() error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
+    counter += 0.4
 	scale := ebiten.Monitor().DeviceScaleFactor()
 
 	drawBackground(screen, background)
-/*
-	w, h := background.Bounds().Dx(), background.Bounds().Dy()
-	op := &ebiten.DrawImageOptions{}
-
-	op.GeoM.Translate(-float64(w)/2, -float64(h)/2)
-	op.GeoM.Scale(scale, scale)
-	op.GeoM.Rotate(float64(g.count%360) * 2 * math.Pi / 360)*/
 	sw, sh := screen.Bounds().Dx(), screen.Bounds().Dy()
-/*	op.GeoM.Translate(float64(sw)/2, float64(sh)/2)
-	op.Filter = ebiten.FilterLinear
-	screen.DrawImage(background, op)
-*/
 	fw, fh := ebiten.Monitor().Size()
 	msg := ""
 	if runtime.GOOS == "js" {
@@ -112,16 +103,39 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		Source: mplusFaceSource,
 		Size:   12 * ebiten.Monitor().DeviceScaleFactor(),
 	}, textOp)
+
+	text.Draw(screen, msg, &text.GoTextFace{
+		Source: mplusFaceSource,
+		Size:   12 * ebiten.Monitor().DeviceScaleFactor(),
+	}, textOp)
+
+    msg = story()
+
+
+	textOp.GeoM.Translate(500*scale, (400-counter)*scale)
+	textOp.LineSpacing = 30 * ebiten.Monitor().DeviceScaleFactor() * 1.2
+	text.Draw(screen, msg, &text.GoTextFace{
+		Source: mplusFaceSource,
+		Size:   30 * ebiten.Monitor().DeviceScaleFactor(),
+	}, textOp)
 }
 
 func story() string {
     return `Darkness had fallen over the realm.
 
-The land was cracked and scarred from endless war, as armies clashed and kingdoms tumbled into ruin. Above, the skies teemed with fire-breathing dragons, their wings blotting out the sun as they raided villages, leaving ash and ruin in their wake. Forests that once thrived with life now lay charred and silent, their trees reduced to ash and memory.
+The land was cracked and scarred from endless war, as armies clashed
+and kingdoms tumbled into ruin. Above, the skies teemed with
+fire-breathing dragons, their wings blotting out the sun as they raided
+villages, leaving ash and ruin in their wake.
+Forests that once thrived with life now lay charred and silent,
+their trees reduced to ash and memory.
 
-In the shadows, goblins prowled through the wreckage, scavenging what little remained of a fallen world. Hope flickered faintly in the hearts of the survivors—if it was still there at all.
+In the shadows, goblins prowled through the wreckage, scavenging
+what little remained of a fallen world. Hope flickered
+faintly in the hearts of the survivors—if it was still there at all.
 
-Was there any salvation for this broken land? Or had the darkness claimed it forever?`
+Was there any salvation for this broken land? Or had the darkness
+claimed it forever?`
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
