@@ -28,6 +28,13 @@ var (
     counter float64
 )
 
+const (
+    stage1Timeout = 1900
+    stage2Timeout = 5000
+
+    final = stage2Timeout
+)
+
 func init() {
     logo, err = loadImage("pics/bruce-lee3.png")
     if err != nil {
@@ -73,7 +80,7 @@ type Game struct {
 func (g *Game) Update() error {
 	g.count++
 
-	if (counter > 5000) {
+	if (counter > final) {
             return ebiten.Termination
         }
 
@@ -93,9 +100,9 @@ func (g *Game) Update() error {
 
 func (g *Game) Draw(screen *ebiten.Image) {
     counter += 7
-    if (counter < 1900) {
+    if (counter < stage1Timeout) {
         stage1(screen)
-    } else if (counter < 5000) {
+    } else if (counter < stage2Timeout) {
         stage2(screen)
     }
 }
