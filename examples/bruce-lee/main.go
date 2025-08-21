@@ -20,6 +20,7 @@ import (
 
 var (
     err           error
+	logo    *ebiten.Image
 	background    *ebiten.Image
 	mplusFaceSource *text.GoTextFaceSource
     context *audio.Context
@@ -28,7 +29,12 @@ var (
 )
 
 func init() {
-    background, err = loadImage("pics/bruce-lee3.png")
+    logo, err = loadImage("pics/bruce-lee3.png")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    background, err = loadImage("pics/brusli2.png")
     if err != nil {
         log.Fatal(err)
     }
@@ -67,6 +73,10 @@ type Game struct {
 func (g *Game) Update() error {
 	g.count++
 
+	if (counter > 5000) {
+            return ebiten.Termination
+        }
+
 	if runtime.GOOS == "js" {
 		if ebiten.IsKeyPressed(ebiten.KeyF) || len(inpututil.AppendJustPressedTouchIDs(nil)) > 0 {
 			ebiten.SetFullscreen(true)
@@ -74,18 +84,33 @@ func (g *Game) Update() error {
 	}
     playbackDone := player == nil || !player.IsPlaying()
 
-
 	if runtime.GOOS != "js" && (ebiten.IsKeyPressed(ebiten.KeyQ) || playbackDone) {
-		return ebiten.Termination
+	    fmt.Println(counter)
+		return nil
 	}
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
     counter += 7
+    if (counter < 1900) {
+        stage1(screen)
+    } else if (counter < 5000) {
+        stage2(screen)
+    } else {
+        fmt.Println(ebiten.Termination)
+    }
+}
+
+func stage2(screen *ebiten.Image){
+    drawBackground(screen, background)
+}
+
+func stage1(screen *ebiten.Image) {
+
 	scale := ebiten.Monitor().DeviceScaleFactor()
 
-	drawBackground(screen, background)
+	drawBackground(screen, logo)
 	sw, sh := screen.Bounds().Dx(), screen.Bounds().Dy()
 	fw, fh := ebiten.Monitor().Size()
 	msg := ""
