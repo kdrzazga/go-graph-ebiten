@@ -97,20 +97,18 @@ func (g *Game) Draw(screen *ebiten.Image) {
         stage1(screen)
     } else if (counter < 5000) {
         stage2(screen)
-    } else {
-        fmt.Println(ebiten.Termination)
     }
 }
 
 func stage2(screen *ebiten.Image){
-    drawBackground(screen, background)
+    drawBackground(screen, background, 2555, 705)
 }
 
 func stage1(screen *ebiten.Image) {
 
 	scale := ebiten.Monitor().DeviceScaleFactor()
 
-	drawBackground(screen, logo)
+	drawBackground(screen, logo, 410, 371)
 	sw, sh := screen.Bounds().Dx(), screen.Bounds().Dy()
 	fw, fh := ebiten.Monitor().Size()
 	msg := ""
@@ -168,8 +166,8 @@ func main() {
 	}
 }
 
-func drawBackground(screen *ebiten.Image, bg *ebiten.Image) {
-    subImg := bg.SubImage(image.Rect(0, 0, 410, 371)).(*ebiten.Image)
+func drawBackground(screen, bg *ebiten.Image, w, h int) {
+    subImg := bg.SubImage(image.Rect(0, 0, w, h)).(*ebiten.Image)
     op := &ebiten.DrawImageOptions{}
     op.GeoM.Scale(2, 2)
     screen.DrawImage(subImg, op)
