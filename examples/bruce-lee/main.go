@@ -27,6 +27,10 @@ var (
     player  *audio.Player
     player2  *audio.Player
     counter float64
+
+    shiftX int
+    shiftY int
+    currentStage int
 )
 
 const (
@@ -37,9 +41,14 @@ const (
 
     stage1MusicPath = "audio/Boards dont hit back.wav"
     stage2MusicPath = "audio/BruceLee.wav"
+
+    moveSpeed = 2
 )
 
 func init() {
+    shiftX = 0
+    shiftY = 0
+
     context = audio.NewContext(44100)
 
     logo, err = loadImage("pics/bruce-lee3.png")
@@ -51,9 +60,7 @@ func init() {
     if err != nil {
         log.Fatal(err)
     }
-}
 
-func init() {
 	s, err := text.NewGoTextFaceSource(bytes.NewReader(fonts.MPlus1pRegular_ttf))
 	if err != nil {
 		log.Fatal(err)
@@ -70,7 +77,6 @@ func initAudio(path string) (*audio.Player, error) {
     if err != nil {
         return nil, err
     }
-
 
     localPlayer, err := audio.NewPlayer(context, stream)
     if err != nil {
@@ -89,8 +95,8 @@ func (g *Game) Update() error {
 	g.count++
 
 	if (counter > final) {
-            return ebiten.Termination
-        }
+        return ebiten.Termination
+    }
 
 	if runtime.GOOS == "js" {
 		if ebiten.IsKeyPressed(ebiten.KeyF) || len(inpututil.AppendJustPressedTouchIDs(nil)) > 0 {
@@ -100,7 +106,7 @@ func (g *Game) Update() error {
     playbackDone := player == nil || !player.IsPlaying()
 
 	if runtime.GOOS != "js" && (ebiten.IsKeyPressed(ebiten.KeyQ) || playbackDone) {
-	    fmt.Println(counter)
+	    fmt.Print(counter)
 		return nil
 	}
 	return nil
@@ -116,7 +122,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 }
 
 func stage2(screen *ebiten.Image){
-    drawBackground(screen, background, 2555, 705)
+    drawBackground(screen, background, shiftX, shiftY, 2555, 705)
 
     if player2 == nil{
         player2, err = initAudio(stage2MusicPath)
@@ -126,13 +132,15 @@ func stage2(screen *ebiten.Image){
         	log.Fatal(err)
         }
     }
+
+    move()
 }
 
 func stage1(screen *ebiten.Image) {
 
 	scale := ebiten.Monitor().DeviceScaleFactor()
 
-	drawBackground(screen, logo, 410, 371)
+	drawBackground(screen, logo, 20, 20, 410, 371)
 	sw, sh := screen.Bounds().Dx(), screen.Bounds().Dy()
 	fw, fh := ebiten.Monitor().Size()
 	msg := ""
@@ -170,6 +178,20 @@ func stage1(screen *ebiten.Image) {
 	}, textOp)
 }
 
+func move() {
+    if (shiftX > moveSpeed) && (ebiten.IsKeyPressed(ebiten.KeyA) || ebiten.IsKeyPressed(ebiten.KeyArrowLeft)) {
+        shiftX -= moveSpeed
+    } else if ebiten.IsKeyPressed(ebiten.KeyD) || ebiten.IsKeyPressed(ebiten.KeyArrowRight) {
+        shiftX += moveSpeed
+    }
+    if (shiftY > moveSpeed) && (ebiten.IsKeyPressed(ebiten.KeyW) || ebiten.IsKeyPressed(ebiten.KeyArrowUp)) {
+        shiftY -= moveSpeed
+    } else if ebiten.IsKeyPressed(ebiten.KeyS) || ebiten.IsKeyPressed(ebiten.KeyArrowDown) {
+        shiftY += moveSpeed
+    }
+    fmt.Println(" [", shiftX, shiftY, "] ")
+}
+
 func story() string {
     return `BOARDS DON'T HIT BACK....`
 }
@@ -180,8 +202,6 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 }
 
 func main() {
-
-    //context := audio.NewContext(44100)
     player, err = initAudio(stage1MusicPath)
     player.Play()
 
@@ -192,8 +212,8 @@ func main() {
 	}
 }
 
-func drawBackground(screen, bg *ebiten.Image, w, h int) {
-    subImg := bg.SubImage(image.Rect(0, 0, w, h)).(*ebiten.Image)
+func drawBackground(screen, bg *ebiten.Image, x, y, w, h int) {
+    subImg := bg.SubImage(image.Rect(x, y, w, h)).(*ebiten.Image)
     op := &ebiten.DrawImageOptions{}
     op.GeoM.Scale(2, 2)
     screen.DrawImage(subImg, op)
