@@ -26,12 +26,12 @@ func stage1(screen *ebiten.Image, counter float64) {
         pic = logo
     }
 
-    pos := 60 + int((counter)/10)
+    pos := 60 - int((counter)/15)
     if (pic == logo){
         pos = 20
     }
 
-    drawBackground(screen, pic, pos, pos, 2555, 705)
+    drawBackground(screen, pic, pos - 200, pos-99, 2555, 705)
 
     if player == nil{
         player, err = initAudio(stage2MusicPath)
@@ -44,13 +44,13 @@ func stage1(screen *ebiten.Image, counter float64) {
 
 	scale := ebiten.Monitor().DeviceScaleFactor()
 
-	//drawBackground(screen, logo, 20, 20, 410, 371)
 	sw, sh := screen.Bounds().Dx(), screen.Bounds().Dy()
 	fw, fh := ebiten.Monitor().Size()
-	msg := ""
+	msg := "\n\n\n"
 	msg += fmt.Sprintf("Screen size in fullscreen: %d, %d\n", fw, fh)
 	msg += fmt.Sprintf("Game's screen size: %d, %d\n", sw, sh)
 	msg += fmt.Sprintf("Device scale factor: %0.2f\n", scale)
+	msg += fmt.Sprintf("\nBeware of fat YAMO and the Ninja...\n")
 
 	textOp := &text.DrawOptions{}
 	textOp.GeoM.Translate(50*scale, 650*scale)

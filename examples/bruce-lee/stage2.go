@@ -13,12 +13,13 @@ func stage2(screen *ebiten.Image) {
 
 	scale := ebiten.Monitor().DeviceScaleFactor()
 
-	drawBackground(screen, logo, 20, 20, 410, 371)
-	msg := ""
+	//drawBackground(screen, logo, 20, 20, 410, 371)
+	drawBackground(screen, logo, 20 - 200, 20-99, 2555, 705)
+	msg := "\n\n\n\n\n"
 	if runtime.GOOS == "js" {
 		msg += "Press F or touch the screen to enter fullscreen (again).\n"
 	} else {
-		msg += "Press Q to quit.\n"
+		msg += "Entering castle of the SORCERER...\n"
 	}
 
 	textOp := &text.DrawOptions{}
