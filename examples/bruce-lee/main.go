@@ -18,9 +18,13 @@ import (
 )
 
 var (
-    err           error
-	logo    *ebiten.Image
-	background    *ebiten.Image
+    err         error
+	logo        *ebiten.Image
+	background  *ebiten.Image
+	pic1nun     *ebiten.Image
+	pic2nun     *ebiten.Image
+	pic3nun     *ebiten.Image
+	pic4        *ebiten.Image
 	mplusFaceSource *text.GoTextFaceSource
     context *audio.Context
     player  *audio.Player
@@ -33,7 +37,7 @@ var (
 )
 
 const (
-    stage1Timeout = 0
+    stage1Timeout = 5000
     stage2Timeout = 1900 + stage1Timeout
     stage3Timeout = 24000 + stage2Timeout
 
@@ -57,6 +61,22 @@ func init() {
     }
 
     background, err = loadImage("pics/brusli2.png")
+    if err != nil {
+        log.Fatal(err)
+    }
+    pic1nun, err = loadImage("pics/bruce-lee-nunchako1.png")
+    if err != nil {
+        log.Fatal(err)
+    }
+    pic2nun, err = loadImage("pics/bruce-lee-nunchako2.png")
+    if err != nil {
+        log.Fatal(err)
+    }
+    pic3nun, err = loadImage("pics/bruce-lee2.png")
+    if err != nil {
+        log.Fatal(err)
+    }
+    pic4, err = loadImage("pics/bl.png")
     if err != nil {
         log.Fatal(err)
     }
@@ -115,7 +135,7 @@ func (g *Game) Update() error {
 func (g *Game) Draw(screen *ebiten.Image) {
     counter += 7
     if (counter < stage1Timeout) {
-        stage1(screen)
+        stage1(screen, counter)
     }else if (counter < stage2Timeout) {
         stage2(screen)
     } else if (counter < stage3Timeout) {

@@ -5,13 +5,33 @@ import (
 	"log"
 	"image/color"
 	_ "image/jpeg"
-	"runtime"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/text/v2"
 )
 
-func stage1(screen *ebiten.Image) {
+func stage1(screen *ebiten.Image, counter float64) {
+    var pic *ebiten.Image
+
+    switch {
+    case counter < 1000:
+        pic = pic4
+    case counter < 2000:
+        pic = pic1nun
+    case counter < 3000:
+        pic = pic2nun
+    case counter < 4000:
+        pic = pic3nun
+    default:
+        pic = logo
+    }
+
+    pos := 60 + int((counter)/10)
+    if (pic == logo){
+        pos = 20
+    }
+
+    drawBackground(screen, pic, pos, pos, 2555, 705)
 
     if player == nil{
         player, err = initAudio(stage2MusicPath)
@@ -24,15 +44,10 @@ func stage1(screen *ebiten.Image) {
 
 	scale := ebiten.Monitor().DeviceScaleFactor()
 
-	drawBackground(screen, logo, 20, 20, 410, 371)
+	//drawBackground(screen, logo, 20, 20, 410, 371)
 	sw, sh := screen.Bounds().Dx(), screen.Bounds().Dy()
 	fw, fh := ebiten.Monitor().Size()
 	msg := ""
-	if runtime.GOOS == "js" {
-		msg += "Press F or touch the screen to enter fullscreen (again).\n"
-	} else {
-		msg += "Press Q to quit.\n"
-	}
 	msg += fmt.Sprintf("Screen size in fullscreen: %d, %d\n", fw, fh)
 	msg += fmt.Sprintf("Game's screen size: %d, %d\n", sw, sh)
 	msg += fmt.Sprintf("Device scale factor: %0.2f\n", scale)
