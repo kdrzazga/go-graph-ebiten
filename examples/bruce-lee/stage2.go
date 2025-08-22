@@ -1,38 +1,52 @@
 package main
 
 import (
-	"fmt"
+	"image/color"
 	_ "image/jpeg"
-	"log"
+	"runtime"
 
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/text/v2"
 )
 
-func stage2(screen *ebiten.Image){
-    drawBackground(screen, background, shiftX, shiftY, 2555, 705)
+func stage2(screen *ebiten.Image) {
 
-    if player2 == nil{
-        player2, err = initAudio(stage2MusicPath)
-        player2.Play()
+	scale := ebiten.Monitor().DeviceScaleFactor()
 
-        if err != nil {
-        	log.Fatal(err)
-        }
-    }
+	drawBackground(screen, logo, 20, 20, 410, 371)
+	msg := ""
+	if runtime.GOOS == "js" {
+		msg += "Press F or touch the screen to enter fullscreen (again).\n"
+	} else {
+		msg += "Press Q to quit.\n"
+	}
 
-    move()
+	textOp := &text.DrawOptions{}
+	textOp.GeoM.Translate(50*scale, 650*scale)
+	textOp.ColorScale.ScaleWithColor(color.White)
+	textOp.LineSpacing = 12 * ebiten.Monitor().DeviceScaleFactor() * 1.5
+	text.Draw(screen, msg, &text.GoTextFace{
+		Source: mplusFaceSource,
+		Size:   12 * ebiten.Monitor().DeviceScaleFactor(),
+	}, textOp)
+
+	text.Draw(screen, msg, &text.GoTextFace{
+		Source: mplusFaceSource,
+		Size:   12 * ebiten.Monitor().DeviceScaleFactor(),
+	}, textOp)
+
+    msg = story()
+
+
+	textOp.GeoM.Translate(610*scale, (400-counter)*scale)
+	textOp.LineSpacing = 30 * ebiten.Monitor().DeviceScaleFactor() * 2
+	text.Draw(screen, msg, &text.GoTextFace{
+		Source: mplusFaceSource,
+		Size:   30 * ebiten.Monitor().DeviceScaleFactor(),
+	}, textOp)
 }
 
-func move() {
-    if (shiftX > moveSpeed) && (ebiten.IsKeyPressed(ebiten.KeyA) || ebiten.IsKeyPressed(ebiten.KeyArrowLeft)) {
-        shiftX -= moveSpeed
-    } else if ebiten.IsKeyPressed(ebiten.KeyD) || ebiten.IsKeyPressed(ebiten.KeyArrowRight) {
-        shiftX += moveSpeed
-    }
-    if (shiftY > moveSpeed) && (ebiten.IsKeyPressed(ebiten.KeyW) || ebiten.IsKeyPressed(ebiten.KeyArrowUp)) {
-        shiftY -= moveSpeed
-    } else if ebiten.IsKeyPressed(ebiten.KeyS) || ebiten.IsKeyPressed(ebiten.KeyArrowDown) {
-        shiftY += moveSpeed
-    }
-    fmt.Println(" [", shiftX, shiftY, "] ")
+
+func story() string {
+    return `BOARDS DON'T HIT BACK....`
 }

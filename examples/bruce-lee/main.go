@@ -33,13 +33,14 @@ var (
 )
 
 const (
-    stage1Timeout = 1900
-    stage2Timeout = 26000
+    stage1Timeout = 0
+    stage2Timeout = 1900 + stage1Timeout
+    stage3Timeout = 24000 + stage2Timeout
 
-    final = stage2Timeout
+    final = stage3Timeout
 
-    stage1MusicPath = "audio/Boards dont hit back.wav"
-    stage2MusicPath = "audio/BruceLee.wav"
+    stage2MusicPath = "audio/Boards dont hit back.wav"
+    stage3MusicPath = "audio/BruceLee.wav"
 
     moveSpeed = 2
 )
@@ -115,8 +116,10 @@ func (g *Game) Draw(screen *ebiten.Image) {
     counter += 7
     if (counter < stage1Timeout) {
         stage1(screen)
-    } else if (counter < stage2Timeout) {
+    }else if (counter < stage2Timeout) {
         stage2(screen)
+    } else if (counter < stage3Timeout) {
+        stage3(screen)
     }
 }
 
@@ -126,10 +129,7 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 }
 
 func main() {
-    player, err = initAudio(stage1MusicPath)
-    player.Play()
-
-	ebiten.SetFullscreen(true)
+    ebiten.SetFullscreen(true)
 	ebiten.SetWindowTitle("Fullscreen (Ebitengine Demo)")
 	if err := ebiten.RunGame(&Game{}); err != nil {
 		log.Fatal(err)

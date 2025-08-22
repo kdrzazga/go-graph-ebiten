@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"image/color"
 	_ "image/jpeg"
 	"runtime"
@@ -11,6 +12,15 @@ import (
 )
 
 func stage1(screen *ebiten.Image) {
+
+    if player == nil{
+        player, err = initAudio(stage2MusicPath)
+        player.Play()
+
+        if err != nil {
+        	log.Fatal(err)
+        }
+    }
 
 	scale := ebiten.Monitor().DeviceScaleFactor()
 
@@ -50,9 +60,4 @@ func stage1(screen *ebiten.Image) {
 		Source: mplusFaceSource,
 		Size:   30 * ebiten.Monitor().DeviceScaleFactor(),
 	}, textOp)
-}
-
-
-func story() string {
-    return `BOARDS DON'T HIT BACK....`
 }
