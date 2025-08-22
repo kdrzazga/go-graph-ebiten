@@ -25,17 +25,23 @@ var (
 	mplusFaceSource *text.GoTextFaceSource
     context *audio.Context
     player  *audio.Player
+    player2  *audio.Player
     counter float64
 )
 
 const (
     stage1Timeout = 1900
-    stage2Timeout = 5000
+    stage2Timeout = 26000
 
     final = stage2Timeout
+
+    stage1MusicPath = "audio/Boards dont hit back.wav"
+    stage2MusicPath = "audio/BruceLee.wav"
 )
 
 func init() {
+    context = audio.NewContext(44100)
+
     logo, err = loadImage("pics/bruce-lee3.png")
     if err != nil {
         log.Fatal(err)
@@ -56,7 +62,6 @@ func init() {
 }
 
 func initAudio(path string) (*audio.Player, error) {
-    context = audio.NewContext(44100)
     f, err := os.Open(path)
     if err != nil {
         return nil, err
@@ -66,10 +71,13 @@ func initAudio(path string) (*audio.Player, error) {
         return nil, err
     }
 
+
     localPlayer, err := audio.NewPlayer(context, stream)
     if err != nil {
         return nil, err
     }
+
+    //defer f.Close()
     return localPlayer, nil
 }
 
@@ -109,6 +117,15 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 func stage2(screen *ebiten.Image){
     drawBackground(screen, background, 2555, 705)
+
+    if player2 == nil{
+        player2, err = initAudio(stage2MusicPath)
+        player2.Play()
+
+        if err != nil {
+        	log.Fatal(err)
+        }
+    }
 }
 
 func stage1(screen *ebiten.Image) {
@@ -163,7 +180,9 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 }
 
 func main() {
-    player, err = initAudio("audio/Boards dont hit back.wav")
+
+    //context := audio.NewContext(44100)
+    player, err = initAudio(stage1MusicPath)
     player.Play()
 
 	ebiten.SetFullscreen(true)
