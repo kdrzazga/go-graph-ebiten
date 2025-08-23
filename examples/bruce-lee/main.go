@@ -25,6 +25,7 @@ var (
 	pic2nun     *ebiten.Image
 	pic3nun     *ebiten.Image
 	pic4        *ebiten.Image
+	projectileImg        *ebiten.Image
 	mplusFaceSource *text.GoTextFaceSource
     context *audio.Context
     player  *audio.Player
@@ -77,6 +78,10 @@ func init() {
         log.Fatal(err)
     }
     pic4, err = loadImage("pics/bl.png")
+    if err != nil {
+        log.Fatal(err)
+    }
+    projectileImg, err = loadImage("pics/projectile.png")
     if err != nil {
         log.Fatal(err)
     }

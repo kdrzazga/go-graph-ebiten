@@ -8,6 +8,19 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
+type projectile struct {
+    minX int
+    x int
+    y int
+    maxX int
+}
+
+var projectiles = []projectile{
+    {minX: 205, x: 205, y: 265, maxX: 230},
+    {minX: 9, x: 9, y: 330, maxX: 39},
+    {minX: 766, x: 766, y: 425, maxX: 805},
+}
+
 func stage3(screen *ebiten.Image){
     drawBackground(screen, background, shiftX, shiftY, 2555, 705)
 
@@ -20,10 +33,11 @@ func stage3(screen *ebiten.Image){
         }
     }
 
-    move()
+    moveBackground()
+    moveProjectiles()
 }
 
-func move() {
+func moveBackground() {
     if (shiftX > moveSpeed) && (ebiten.IsKeyPressed(ebiten.KeyA) || ebiten.IsKeyPressed(ebiten.KeyArrowLeft)) {
         shiftX -= moveSpeed
     } else if ebiten.IsKeyPressed(ebiten.KeyD) || ebiten.IsKeyPressed(ebiten.KeyArrowRight) {
@@ -35,4 +49,14 @@ func move() {
         shiftY += moveSpeed
     }
     fmt.Println(" [", shiftX, shiftY, "] ")
+}
+
+func moveProjectiles() {
+    for i := range projectiles {
+        if (projectiles[i].x < projectiles[i].maxX){
+            projectiles[i].x++
+        } else {
+            projectiles[i].x = projectiles[i].minX
+        }
+    }
 }
