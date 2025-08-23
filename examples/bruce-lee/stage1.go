@@ -26,8 +26,8 @@ func stage1(screen *ebiten.Image, counter float64) {
         pic = logo
     }
 
-    pos := 60 - int((counter)/15)
-    if (pic == logo){
+    pos :=  int((counter)/15)
+    if (pic == logo || pic == pic3nun){
         pos = 20
     }
 
@@ -46,21 +46,15 @@ func stage1(screen *ebiten.Image, counter float64) {
 
 	sw, sh := screen.Bounds().Dx(), screen.Bounds().Dy()
 	fw, fh := ebiten.Monitor().Size()
-	msg := "\n\n\n"
-	msg += fmt.Sprintf("Screen size in fullscreen: %d, %d\n", fw, fh)
+	msg := fmt.Sprintf("Screen size in fullscreen: %d, %d\n", fw, fh)
 	msg += fmt.Sprintf("Game's screen size: %d, %d\n", sw, sh)
 	msg += fmt.Sprintf("Device scale factor: %0.2f\n", scale)
 	msg += fmt.Sprintf("\nBeware of fat YAMO and the Ninja...\n")
 
 	textOp := &text.DrawOptions{}
-	textOp.GeoM.Translate(50*scale, 650*scale)
+	textOp.GeoM.Translate(830*scale, 700*scale)
 	textOp.ColorScale.ScaleWithColor(color.White)
 	textOp.LineSpacing = 12 * ebiten.Monitor().DeviceScaleFactor() * 1.5
-	text.Draw(screen, msg, &text.GoTextFace{
-		Source: mplusFaceSource,
-		Size:   12 * ebiten.Monitor().DeviceScaleFactor(),
-	}, textOp)
-
 	text.Draw(screen, msg, &text.GoTextFace{
 		Source: mplusFaceSource,
 		Size:   12 * ebiten.Monitor().DeviceScaleFactor(),
@@ -69,7 +63,7 @@ func stage1(screen *ebiten.Image, counter float64) {
     msg = story()
 
 
-	textOp.GeoM.Translate(610*scale, (400-counter)*scale)
+	textOp.GeoM.Translate(10*scale, (400-counter)*scale)
 	textOp.LineSpacing = 30 * ebiten.Monitor().DeviceScaleFactor() * 2
 	text.Draw(screen, msg, &text.GoTextFace{
 		Source: mplusFaceSource,
