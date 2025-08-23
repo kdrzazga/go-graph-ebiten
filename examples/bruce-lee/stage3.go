@@ -22,7 +22,9 @@ var projectiles = []projectile{
     {minX: 530, x: 530, y: 290, maxX: 530+17, velocity: 0.3},
     {minX: 9, x: 9, y: 330, maxX: 31, velocity: 0.3},
     {minX: 766, x: 766, y: 425, maxX: 805, velocity: 0.3},
-    {minX: 1660, x: 1660, y: 610, maxX: 1900, velocity: 0.3},
+    {minX: 1660, x: 1660, y: 555, maxX: 1900, velocity: 1.0},
+    {minX: 1660, x: 1660, y: 610, maxX: 1900, velocity: 1.3},
+    {minX: 1660, x: 1660, y: 645, maxX: 1900, velocity: 2.3},
 }
 
 var floorProjectiles = []projectile{
@@ -78,7 +80,7 @@ func moveBackground() {
     } else if ebiten.IsKeyPressed(ebiten.KeyS) || ebiten.IsKeyPressed(ebiten.KeyArrowDown) {
         shiftY += moveSpeed
     }
-    fmt.Println(" [", shiftX, shiftY, "] ")
+    //fmt.Println(" [", shiftX, shiftY, "] ")
 }
 
 func moveProjectiles() {
