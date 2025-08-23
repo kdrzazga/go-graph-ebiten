@@ -17,27 +17,36 @@ type projectile struct {
     velocity float64
 }
 
-var projectiles = []projectile{
-    {minX: 195, x: 205, y: 265, maxX: 222, velocity: 0.3},
-    {minX: 530, x: 530, y: 290, maxX: 530+17, velocity: 0.3},
-    {minX: 9, x: 9, y: 330, maxX: 31, velocity: 0.3},
-    {minX: 766, x: 766, y: 425, maxX: 805, velocity: 0.3},
-    {minX: 1660, x: 1660, y: 555, maxX: 1900, velocity: 1.0},
-    {minX: 1660, x: 1660, y: 610, maxX: 1900, velocity: 1.3},
-    {minX: 1660, x: 1660, y: 645, maxX: 1900, velocity: 2.3},
-}
+var (
 
-var floorProjectiles = []projectile{
-    {minX: 38, x: 38, y: 505, maxX: 278, velocity: 3},
-    {minX: 670, x: 670, y: 520, maxX: 833, velocity: 2.9},
-    {minX: 1004, x: 1004, y: 578, maxX: 1224, velocity: 2.1},
-    {minX: 1004, x: 1004, y: 616, maxX: 1224, velocity: 2.5},
-    {minX: 1004, x: 1004, y: 658, maxX: 1224, velocity: 2.3},
-    {minX: 975, x: 975, y: 698, maxX: 1224, velocity: 2.7},
-}
+    projectiles = []projectile{
+        {minX: 195, x: 205, y: 265, maxX: 222, velocity: 0.3},
+        {minX: 530, x: 530, y: 290, maxX: 530+17, velocity: 0.3},
+        {minX: 9, x: 9, y: 330, maxX: 31, velocity: 0.3},
+        {minX: 766, x: 766, y: 425, maxX: 805, velocity: 0.3},
+        {minX: 1660, x: 1660, y: 555, maxX: 1900, velocity: 1.0},
+        {minX: 1660, x: 1660, y: 610, maxX: 1900, velocity: 1.3},
+        {minX: 1660, x: 1660, y: 645, maxX: 1900, velocity: 2.3},
+    }
 
-func stage3(screen *ebiten.Image){
-    drawBackground(screen, background, shiftX, shiftY, 2555, 705)
+    floorProjectiles = []projectile{
+        {minX: 38, x: 38, y: 505, maxX: 278, velocity: 3},
+        {minX: 670, x: 670, y: 520, maxX: 833, velocity: 2.9},
+        {minX: 1004, x: 1004, y: 578, maxX: 1224, velocity: 2.1},
+        {minX: 1004, x: 1004, y: 616, maxX: 1224, velocity: 2.5},
+        {minX: 1004, x: 1004, y: 658, maxX: 1224, velocity: 2.3},
+        {minX: 975, x: 975, y: 698, maxX: 1224, velocity: 2.7},
+    }
+)
+
+func stage3(screen *ebiten.Image, counter float64){
+    var bgPic *ebiten.Image
+    if float64(int(counter)%(7*50)) > 7*25 {
+        bgPic = background
+    } else {
+        bgPic = background2
+    }
+    drawBackground(screen, bgPic, shiftX, shiftY, 2555, 705)
 
     drawProjectiles(screen, projectileImg, projectiles)
 
