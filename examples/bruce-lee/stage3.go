@@ -18,7 +18,6 @@ type projectile struct {
 }
 
 var (
-
     projectiles = []projectile{
         {minX: 195, x: 205, y: 265, maxX: 222, velocity: 0.3},
         {minX: 530, x: 530, y: 290, maxX: 530+17, velocity: 0.3},
