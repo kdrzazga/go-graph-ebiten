@@ -96,6 +96,8 @@ func init() {
 		log.Fatal(err)
 	}
 	mplusFaceSource = s
+
+	initStage3()
 }
 
 func initAudio(path string) (*audio.Player, error) {

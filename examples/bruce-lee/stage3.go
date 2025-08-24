@@ -1,7 +1,7 @@
 package main
 
 import (
-	//"fmt"
+	"math"
 	"log"
 	"image/color"
 	_ "image/jpeg"
@@ -36,7 +36,22 @@ var (
         {minX: 1004, x: 1004, y: 658, maxX: 1224, velocity: 2.3},
         {minX: 975, x: 975, y: 698, maxX: 1224, velocity: 2.7},
     }
+
+    gifAnimator *GIFAnimator
+    dragonX float64
+    dragonY float64
 )
+
+func initStage3(){
+    var err error
+    gifAnimator, err = NewGIFAnimator("pics/drag-on.gif")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    dragonX = float64(1800)
+    dragonY = float64(300)
+}
 
 func stage3(screen *ebiten.Image, counter float64){
     var bgPic *ebiten.Image
@@ -65,6 +80,10 @@ func stage3(screen *ebiten.Image, counter float64){
 
     moveBackground()
     moveProjectiles()
+    moveDragon()
+
+    gifAnimator.Update()
+    gifAnimator.Draw(screen, dragonX, dragonY)
 }
 
 func drawProjectiles(screen *ebiten.Image, projectilePic *ebiten.Image, projectiles []projectile){
@@ -106,4 +125,13 @@ func moveProjectiles() {
             floorProjectiles[i].x = floorProjectiles[i].minX
         }
     }
+}
+
+func moveDragon(){
+    if (dragonX > -200){
+        dragonX--
+    } else {
+        dragonX = float64(1800)
+    }
+        dragonY = 300*math.Sin(dragonX/float64(400)) + 300
 }
