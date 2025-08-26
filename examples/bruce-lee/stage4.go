@@ -8,6 +8,9 @@ import (
 
 var (
     returnOfFuryAnimator *GIFAnimator
+    chuckNorrisAnimator *GIFAnimator
+    kickdownAnimator *GIFAnimator
+    returnOfFuryImg *ebiten.Image
 )
 
 func initStage4(){
@@ -17,9 +20,32 @@ func initStage4(){
     if err != nil {
         log.Fatal(err)
     }
+    chuckNorrisAnimator, err = NewGIFAnimator("pics/brucelee-chucknorris.gif", false)
+    if err != nil {
+        log.Fatal(err)
+    }
+    kickdownAnimator, err = NewGIFAnimator("pics/kickdown.gif", false)
+    if err != nil {
+        log.Fatal(err)
+    }
+    returnOfFuryImg, err = loadImage("pics/return-of-fury.jpg")
+    if err != nil {
+        log.Fatal(err)
+    }
 }
 
 func stage4(screen *ebiten.Image, counter float64){
-    returnOfFuryAnimator.Update()
-    returnOfFuryAnimator.Draw(screen, 0, 0)
+    if (counter < 2000 + stage3Timeout) {
+        returnOfFuryAnimator.Update()
+        returnOfFuryAnimator.Draw(screen, 0, 0)
+    } else if (counter < 3000 + stage3Timeout) {
+        drawBackgroundScaled(screen, returnOfFuryImg, 0, 0, 400, 245, float64(1))
+        chuckNorrisAnimator.Update()
+        chuckNorrisAnimator.Draw(screen, 400, 245)
+    } else {
+        drawBackgroundScaled(screen, returnOfFuryImg, 0, 0, 400, 245, float64(1))
+        chuckNorrisAnimator.Draw(screen, 400, 245)
+        kickdownAnimator.Update()
+        kickdownAnimator.Draw(screen, 400+468, 245+280)
+    }
 }

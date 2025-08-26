@@ -41,7 +41,7 @@ const (
     stage1Timeout = 5000
     stage2Timeout = 1900 + stage1Timeout
     stage3Timeout = 24000 + stage2Timeout
-    stage4Timeout = 4000 + stage3Timeout
+    stage4Timeout = 8000 + stage3Timeout
 
     final = stage4Timeout
 
@@ -171,11 +171,15 @@ func main() {
 	}
 }
 
-func drawBackground(screen, bg *ebiten.Image, x, y, w, h int) {
+func drawBackgroundScaled(screen, bg *ebiten.Image, x, y, w, h int, scale float64) {
     subImg := bg.SubImage(image.Rect(x, y, w, h)).(*ebiten.Image)
     op := &ebiten.DrawImageOptions{}
-    op.GeoM.Scale(2, 2)
+    op.GeoM.Scale(scale, scale)
     screen.DrawImage(subImg, op)
+}
+
+func drawBackground(screen, bg *ebiten.Image, x, y, w, h int) {
+    drawBackgroundScaled(screen, bg, x, y, w, h, 2.0)
 }
 
 func loadImage(path string) (*ebiten.Image, error) {
