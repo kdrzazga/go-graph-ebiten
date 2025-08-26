@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"image"
 	_ "image/jpeg"
+	"time"
 	"log"
 	"os"
 	"runtime"
@@ -35,6 +36,8 @@ var (
     shiftX int
     shiftY int
     currentStage int
+
+    startTime time.Time
 )
 
 const (
@@ -52,6 +55,8 @@ const (
 )
 
 func init() {
+    startTime = time.Now()
+
     shiftX = 0
     shiftY = 0
 
@@ -128,6 +133,8 @@ func (g *Game) Update() error {
 	g.count++
 
 	if (counter > final) {
+        elapsed := time.Since(startTime)
+        log.Printf("Execution time: %v\n", elapsed)
         return ebiten.Termination
     }
 
