@@ -13,7 +13,7 @@ var (
 func initStage4(){
     var err error
 
-    returnOfFuryAnimator, err = NewGIFAnimator("pics/return-of-fury.gif")
+    returnOfFuryAnimator, err = NewGIFAnimator("pics/return-of-fury.gif", false)
     if err != nil {
         log.Fatal(err)
     }

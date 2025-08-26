@@ -51,7 +51,7 @@ func initStage3(){
     var err error
 
     for i := range gifAnimator{
-        gifAnimator[i], err = NewGIFAnimator("pics/drag-on.gif")
+        gifAnimator[i], err = NewGIFAnimator("pics/drag-on.gif", true)
         if err != nil {
             log.Fatal(err)
         }
