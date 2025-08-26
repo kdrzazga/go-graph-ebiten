@@ -41,8 +41,9 @@ const (
     stage1Timeout = 5000
     stage2Timeout = 1900 + stage1Timeout
     stage3Timeout = 24000 + stage2Timeout
+    stage4Timeout = 4000 + stage3Timeout
 
-    final = stage3Timeout
+    final = stage4Timeout
 
     stage2MusicPath = "audio/Boards dont hit back.wav"
     stage3MusicPath = "audio/BruceLee.wav"
@@ -97,6 +98,7 @@ func init() {
 	mplusFaceSource = s
 
 	initStage3()
+	initStage4()
 }
 
 func initAudio(path string) (*audio.Player, error) {
@@ -151,6 +153,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
         stage2(screen)
     } else if (counter < stage3Timeout) {
         stage3(screen, counter)
+    } else if (counter < stage4Timeout) {
+        stage4(screen, counter)
     }
 }
 
