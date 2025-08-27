@@ -2,9 +2,9 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"image"
 	_ "image/jpeg"
+	"time"
 	"log"
 	"os"
 	"runtime"
@@ -36,14 +36,17 @@ var (
     shiftX int
     shiftY int
     currentStage int
+
+    startTime time.Time
 )
 
 const (
     stage1Timeout = 5000
     stage2Timeout = 1900 + stage1Timeout
     stage3Timeout = 24000 + stage2Timeout
+    stage4Timeout = 8000 + stage3Timeout
 
-    final = stage3Timeout
+    final = stage4Timeout
 
     stage2MusicPath = "audio/Boards dont hit back.wav"
     stage3MusicPath = "audio/BruceLee.wav"
@@ -52,6 +55,8 @@ const (
 )
 
 func init() {
+    startTime = time.Now()
+
     shiftX = 0
     shiftY = 0
 
@@ -98,6 +103,7 @@ func init() {
 	mplusFaceSource = s
 
 	initStage3()
+	initStage4()
 }
 
 func initAudio(path string) (*audio.Player, error) {
@@ -127,6 +133,8 @@ func (g *Game) Update() error {
 	g.count++
 
 	if (counter > final) {
+        elapsed := time.Since(startTime)
+        log.Printf("Execution time: %v\n", elapsed)
         return ebiten.Termination
     }
 
@@ -138,7 +146,7 @@ func (g *Game) Update() error {
     playbackDone := player == nil || !player.IsPlaying()
 
 	if runtime.GOOS != "js" && (ebiten.IsKeyPressed(ebiten.KeyQ) || playbackDone) {
-	    fmt.Print(counter)
+	    //fmt.Print(counter)
 		return nil
 	}
 	return nil
@@ -152,6 +160,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
         stage2(screen)
     } else if (counter < stage3Timeout) {
         stage3(screen, counter)
+    } else if (counter < stage4Timeout) {
+        stage4(screen, counter)
     }
 }
 
@@ -168,11 +178,15 @@ func main() {
 	}
 }
 
-func drawBackground(screen, bg *ebiten.Image, x, y, w, h int) {
+func drawBackgroundScaled(screen, bg *ebiten.Image, x, y, w, h int, scale float64) {
     subImg := bg.SubImage(image.Rect(x, y, w, h)).(*ebiten.Image)
     op := &ebiten.DrawImageOptions{}
-    op.GeoM.Scale(2, 2)
+    op.GeoM.Scale(scale, scale)
     screen.DrawImage(subImg, op)
+}
+
+func drawBackground(screen, bg *ebiten.Image, x, y, w, h int) {
+    drawBackgroundScaled(screen, bg, x, y, w, h, 2.0)
 }
 
 func loadImage(path string) (*ebiten.Image, error) {

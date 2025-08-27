@@ -13,9 +13,10 @@ type GIFAnimator struct {
     FrameDelays  []int // in 10ms units
     currentFrame int
     lastTime     time.Time
+    repeatable   bool
 }
 
-func NewGIFAnimator(gifPath string) (*GIFAnimator, error) {
+func NewGIFAnimator(gifPath string, repeat bool) (*GIFAnimator, error) {
     f, err := os.Open(gifPath)
     if err != nil {
         return nil, err
@@ -38,6 +39,7 @@ func NewGIFAnimator(gifPath string) (*GIFAnimator, error) {
         FrameDelays:  g.Delay,
         currentFrame: 0,
         lastTime:     time.Now(),
+        repeatable:   repeat,
     }, nil
 }
 
@@ -47,7 +49,13 @@ func (a *GIFAnimator) Update() {
     delay := a.FrameDelays[a.currentFrame] * 10 // convert to milliseconds
 
     if elapsed >= time.Duration(delay)*time.Millisecond {
-        a.currentFrame = (a.currentFrame + 1) % len(a.Frames)
+        if a.repeatable{
+            a.currentFrame = (a.currentFrame + 1) % len(a.Frames)
+        }  else {
+            if a.currentFrame < len(a.Frames) -1 {
+                a.currentFrame = a.currentFrame + 1
+            }
+        }
         a.lastTime = now
     }
 }
