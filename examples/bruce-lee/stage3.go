@@ -83,7 +83,7 @@ func stage3(screen *ebiten.Image, counter float64){
         }
     }
 
-    moveBackground()
+    moveBackground(counter)
     moveProjectiles()
     moveDragon()
 
@@ -104,7 +104,7 @@ func drawProjectiles(screen *ebiten.Image, projectilePic *ebiten.Image, projecti
     }
 }
 
-func moveBackground() {
+func moveBackground(counter float64) {
     if (shiftX > moveSpeed) && (ebiten.IsKeyPressed(ebiten.KeyA) || ebiten.IsKeyPressed(ebiten.KeyArrowLeft)) {
         shiftX -= moveSpeed
     } else if ebiten.IsKeyPressed(ebiten.KeyD) || ebiten.IsKeyPressed(ebiten.KeyArrowRight) {
@@ -115,6 +115,23 @@ func moveBackground() {
     } else if ebiten.IsKeyPressed(ebiten.KeyS) || ebiten.IsKeyPressed(ebiten.KeyArrowDown) {
         shiftY += moveSpeed
     }
+
+    switch {
+        case counter < 3000 + stage2Timeout:
+            shiftX += moveSpeed
+
+        case counter >= 3000 + stage2Timeout && counter < 3500+ stage2Timeout:
+            shiftX -= moveSpeed
+            shiftY += moveSpeed
+
+        case counter >= 3500+ stage2Timeout && counter < 5000 + stage2Timeout:
+            shiftX -= moveSpeed
+
+        case counter >= 5000+ stage2Timeout && counter < 9000 + stage2Timeout:
+            shiftX += moveSpeed
+
+    }
+
 }
 
 func moveProjectiles() {
