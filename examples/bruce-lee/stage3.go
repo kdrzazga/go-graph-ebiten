@@ -121,7 +121,7 @@ func moveBackground(counter float64) {
         case counter < 6000 + stage2Timeout:
             shiftX += s
 
-        case counter >= 6000 + stage2Timeout && counter < 8000+ stage2Timeout:
+        case counter >= 6000 + stage2Timeout && counter < 10000+ stage2Timeout:
             shiftX -= s
             if int(counter) % 3 == 0 {
                 shiftY += s
@@ -135,7 +135,10 @@ func moveBackground(counter float64) {
 
         case counter >= 17000+ stage2Timeout:
             shiftX += s
-            shiftY += s
+            log.Printf("%d ", shiftY)
+            if (shiftY < 350) {
+                shiftY += s
+            }
 
     }
 
