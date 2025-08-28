@@ -12,6 +12,8 @@ var (
     kickdownAnimator *GIFAnimator
     kickingAnimator *GIFAnimator
     returnOfFuryImg *ebiten.Image
+	bigPic      *ebiten.Image
+	bigPicY     int
 )
 
 func initStage4(){
@@ -37,9 +39,20 @@ func initStage4(){
     if err != nil {
         log.Fatal(err)
     }
+    bigPic, err = loadImage("pics/big3.png")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    bigPicY = 1200
 }
 
 func stage4(screen *ebiten.Image, counter float64){
+    if (bigPicY > 1){
+        bigPicY -= 1
+    }
+
+    drawBackground(screen, bigPic, -20, bigPicY, 730,811)
 
     if (counter < 2000 + stage3Timeout) {
         returnOfFuryAnimator.Update()
