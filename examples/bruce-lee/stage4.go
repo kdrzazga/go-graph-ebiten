@@ -10,6 +10,7 @@ var (
     returnOfFuryAnimator *GIFAnimator
     chuckNorrisAnimator *GIFAnimator
     kickdownAnimator *GIFAnimator
+    kickingAnimator *GIFAnimator
     returnOfFuryImg *ebiten.Image
 )
 
@@ -32,6 +33,10 @@ func initStage4(){
     if err != nil {
         log.Fatal(err)
     }
+    kickingAnimator, err = NewGIFAnimator("pics/kicking.gif", false)
+    if err != nil {
+        log.Fatal(err)
+    }
 }
 
 func stage4(screen *ebiten.Image, counter float64){
@@ -43,11 +48,17 @@ func stage4(screen *ebiten.Image, counter float64){
         drawBackgroundScaled(screen, returnOfFuryImg, 0, 0, 400, 245, float64(1))
         chuckNorrisAnimator.Update()
         chuckNorrisAnimator.Draw(screen, 400, 245)
-    } else {
+    } else if (counter < 5000 + stage3Timeout){
         drawBackgroundScaled(screen, returnOfFuryImg, 0, 0, 400, 245, float64(1))
         chuckNorrisAnimator.Draw(screen, 400, 245)
         kickdownAnimator.Update()
         kickdownAnimator.Draw(screen, 400+468, 245+280)
+    } else {
+        drawBackgroundScaled(screen, returnOfFuryImg, 0, 0, 400, 245, float64(1))
+        chuckNorrisAnimator.Draw(screen, 400, 245)
+        kickdownAnimator.Draw(screen, 400+468, 245+280)
+        kickingAnimator.Update()
+        kickingAnimator.Draw(screen, 400, 245)
     }
 
     if themePlayer == nil{
