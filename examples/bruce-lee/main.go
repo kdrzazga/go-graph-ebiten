@@ -151,6 +151,12 @@ func (g *Game) Update() error {
 	    //fmt.Print(counter)
 		return nil
 	}
+
+    if (counter - stage1Timeout <1.0 || counter - stage2Timeout <1.0 || counter - stage3Timeout <1.0 || counter - stage4Timeout <1.0){
+        elapsed := time.Since(startTime)
+        log.Printf("Execution time: %v\n", elapsed)
+    }
+
 	return nil
 }
 

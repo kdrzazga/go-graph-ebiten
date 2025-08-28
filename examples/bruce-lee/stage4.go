@@ -44,7 +44,7 @@ func stage4(screen *ebiten.Image, counter float64){
     if (counter < 2000 + stage3Timeout) {
         returnOfFuryAnimator.Update()
         returnOfFuryAnimator.Draw(screen, 0, 0)
-    } else if (counter < 3000 + stage3Timeout) {
+    } else if ((counter < 3000 + stage3Timeout) || (counter > 12000 + stage3Timeout && counter < 13000 + stage3Timeout)) {
         drawBackgroundScaled(screen, returnOfFuryImg, 0, 0, 400, 245, float64(1))
         chuckNorrisAnimator.Update()
         chuckNorrisAnimator.Draw(screen, 400, 245)
@@ -61,6 +61,7 @@ func stage4(screen *ebiten.Image, counter float64){
 
         kickdownAnimator.Draw(screen, 400+468, 245+280)
         kickdownAnimator.Update()
+        chuckNorrisAnimator.Reset()
     }
 
     if themePlayer == nil{
