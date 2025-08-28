@@ -31,6 +31,7 @@ var (
     context *audio.Context
     player  *audio.Player
     player2  *audio.Player
+    themePlayer  *audio.Player
     counter float64
 
     shiftX int
@@ -50,6 +51,7 @@ const (
 
     stage2MusicPath = "audio/Boards dont hit back.wav"
     stage3MusicPath = "audio/BruceLee.wav"
+    stage4MusicPath = "audio/Enter The Dragon - Full.wav"
 
     moveSpeed = 2
 )

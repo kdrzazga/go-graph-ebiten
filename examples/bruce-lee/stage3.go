@@ -127,10 +127,10 @@ func moveBackground(counter float64) {
                 shiftY += s
             }
 
-        case counter >= 10000+ stage2Timeout && counter < 13000 + stage2Timeout:
+        case counter >= 10000+ stage2Timeout && counter < 12000 + stage2Timeout:
             shiftX -= s
 
-        case counter >= 13000+ stage2Timeout && counter < 17000 + stage2Timeout:
+        case counter >= 12000+ stage2Timeout && counter < 17000 + stage2Timeout:
             shiftX += moveSpeed
 
         case counter >= 17000+ stage2Timeout:

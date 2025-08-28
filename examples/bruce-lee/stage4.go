@@ -35,6 +35,7 @@ func initStage4(){
 }
 
 func stage4(screen *ebiten.Image, counter float64){
+
     if (counter < 2000 + stage3Timeout) {
         returnOfFuryAnimator.Update()
         returnOfFuryAnimator.Draw(screen, 0, 0)
@@ -47,5 +48,14 @@ func stage4(screen *ebiten.Image, counter float64){
         chuckNorrisAnimator.Draw(screen, 400, 245)
         kickdownAnimator.Update()
         kickdownAnimator.Draw(screen, 400+468, 245+280)
+    }
+
+    if themePlayer == nil{
+        themePlayer, err = initAudio(stage4MusicPath)
+        themePlayer.Play()
+
+        if err != nil {
+        	log.Fatal(err)
+        }
     }
 }
