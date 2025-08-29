@@ -14,6 +14,7 @@ var (
     returnOfFuryImg *ebiten.Image
 	bigPic      *ebiten.Image
 	bigPicY     int
+	extraDelay  int
 )
 
 func initStage4(){
@@ -44,11 +45,14 @@ func initStage4(){
         log.Fatal(err)
     }
 
+    extraDelay = 0
     bigPicY = 2500
 }
 
 func stage4(screen *ebiten.Image, counter float64){
-    if (bigPicY > 1){
+    extraDelay += 1
+    //log.Println(extraDelay, (extraDelay % 3), (extraDelay %3 == 0), bigPicY)
+    if ( extraDelay % 4 > 0 && bigPicY >0){
         bigPicY -= 1
     }
 
