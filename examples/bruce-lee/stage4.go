@@ -44,7 +44,7 @@ func initStage4(){
         log.Fatal(err)
     }
 
-    bigPicY = 1200
+    bigPicY = 2500
 }
 
 func stage4(screen *ebiten.Image, counter float64){
