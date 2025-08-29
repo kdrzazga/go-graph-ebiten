@@ -31,6 +31,7 @@ var (
     context *audio.Context
     player  *audio.Player
     player2  *audio.Player
+    themePlayer  *audio.Player
     counter float64
 
     shiftX int
@@ -44,12 +45,13 @@ const (
     stage1Timeout = 5000
     stage2Timeout = 1900 + stage1Timeout
     stage3Timeout = 24000 + stage2Timeout
-    stage4Timeout = 8000 + stage3Timeout
+    stage4Timeout = 35000 + stage3Timeout
 
     final = stage4Timeout
 
     stage2MusicPath = "audio/Boards dont hit back.wav"
     stage3MusicPath = "audio/BruceLee.wav"
+    stage4MusicPath = "audio/Enter The Dragon - Full.wav"
 
     moveSpeed = 2
 )
@@ -149,6 +151,12 @@ func (g *Game) Update() error {
 	    //fmt.Print(counter)
 		return nil
 	}
+
+    if (counter - stage1Timeout <1.0 || counter - stage2Timeout <1.0 || counter - stage3Timeout <1.0 || counter - stage4Timeout <1.0){
+        elapsed := time.Since(startTime)
+        log.Printf("Execution time: %v\n", elapsed)
+    }
+
 	return nil
 }
 

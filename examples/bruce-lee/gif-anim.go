@@ -65,3 +65,7 @@ func (a *GIFAnimator) Draw(screen *ebiten.Image, x, y float64) {
     op.GeoM.Translate(x, y)
     screen.DrawImage(a.Frames[a.currentFrame], op)
 }
+
+func (a *GIFAnimator) Reset(){
+    a.currentFrame = 0
+}

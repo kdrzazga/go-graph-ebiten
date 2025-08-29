@@ -10,7 +10,10 @@ var (
     returnOfFuryAnimator *GIFAnimator
     chuckNorrisAnimator *GIFAnimator
     kickdownAnimator *GIFAnimator
+    kickingAnimator *GIFAnimator
     returnOfFuryImg *ebiten.Image
+	bigPic      *ebiten.Image
+	bigPicY     int
 )
 
 func initStage4(){
@@ -32,20 +35,54 @@ func initStage4(){
     if err != nil {
         log.Fatal(err)
     }
+    kickingAnimator, err = NewGIFAnimator("pics/kicking.gif", false)
+    if err != nil {
+        log.Fatal(err)
+    }
+    bigPic, err = loadImage("pics/big3.png")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    bigPicY = 1200
 }
 
 func stage4(screen *ebiten.Image, counter float64){
+    if (bigPicY > 1){
+        bigPicY -= 1
+    }
+
+    drawBackground(screen, bigPic, 0, bigPicY, 940,811)
+
     if (counter < 2000 + stage3Timeout) {
         returnOfFuryAnimator.Update()
         returnOfFuryAnimator.Draw(screen, 0, 0)
-    } else if (counter < 3000 + stage3Timeout) {
+    } else if ((counter < 3000 + stage3Timeout) || (counter > 12000 + stage3Timeout && counter < 13000 + stage3Timeout)) {
         drawBackgroundScaled(screen, returnOfFuryImg, 0, 0, 400, 245, float64(1))
         chuckNorrisAnimator.Update()
         chuckNorrisAnimator.Draw(screen, 400, 245)
+    } else if (counter < 8300 + stage3Timeout){
+        drawBackgroundScaled(screen, returnOfFuryImg, 0, 0, 400, 245, float64(1))
+        chuckNorrisAnimator.Draw(screen, 400, 245)
+        kickingAnimator.Update()
+        kickingAnimator.Draw(screen, 10, 245+280)
     } else {
         drawBackgroundScaled(screen, returnOfFuryImg, 0, 0, 400, 245, float64(1))
         chuckNorrisAnimator.Draw(screen, 400, 245)
-        kickdownAnimator.Update()
+
+        kickingAnimator.Draw(screen, 10, 245+280)
+
         kickdownAnimator.Draw(screen, 400+468, 245+280)
+        kickdownAnimator.Update()
+        chuckNorrisAnimator.Reset()
+    }
+
+    if themePlayer == nil{
+        themePlayer, err = initAudio(stage4MusicPath)
+        themePlayer.Play()
+
+        if err != nil {
+        	log.Fatal(err)
+        }
     }
 }

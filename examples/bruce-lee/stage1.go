@@ -47,10 +47,14 @@ func stage1(screen *ebiten.Image, counter float64) {
 	sw, sh := screen.Bounds().Dx(), screen.Bounds().Dy()
 	fw, fh := ebiten.Monitor().Size()
 
-	msg := fmt.Sprintf("Screen size in fullscreen: %d, %d\n", fw, fh)
-	msg += fmt.Sprintf("Game's screen size: %d, %d\n", sw, sh)
-	msg += fmt.Sprintf("Device scale factor: %0.2f\n", scale)
-	msg += fmt.Sprintf("\nBeware of fat YAMO and the Ninja...\n")
+	msg := fmt.Sprintf("Bruce Lee (Lee Jun-fan)\n")
+	msg += fmt.Sprintf("Born: November 27, 1940 in San Francisco, California\n")
+	msg += fmt.Sprintf("Died: July 20, 1973 in Kowloon, Hong Kong\n")
+	msg += fmt.Sprintf("\n\nBeware of fat YAMO and the Ninja...\n")
+
+	log.Printf("Screen size in fullscreen: %d, %d\n", fw, fh)
+	log.Printf("Game's screen size: %d, %d\n", sw, sh)
+	log.Printf("Device scale factor: %0.2f\n", scale)
 
 	textOp := &text.DrawOptions{}
 	textOp.GeoM.Translate(830*scale, 700*scale)
