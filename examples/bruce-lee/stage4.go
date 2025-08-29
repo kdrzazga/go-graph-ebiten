@@ -13,6 +13,7 @@ var (
     kickingAnimator *GIFAnimator
     returnOfFuryImg *ebiten.Image
 	bigPic      *ebiten.Image
+	c64Pic      *ebiten.Image
 	bigPicY     int
 	extraDelay  int
 )
@@ -44,6 +45,10 @@ func initStage4(){
     if err != nil {
         log.Fatal(err)
     }
+    c64Pic, err = loadImage("pics/c64.png")
+    if err != nil {
+        log.Fatal(err)
+    }
 
     extraDelay = 0
     bigPicY = 2500
@@ -52,7 +57,7 @@ func initStage4(){
 func stage4(screen *ebiten.Image, counter float64){
     extraDelay += 1
     //log.Println(extraDelay, (extraDelay % 3), (extraDelay %3 == 0), bigPicY)
-    if ( extraDelay % 4 > 0 && bigPicY >0){
+    if (extraDelay % 4 > 0 && bigPicY > 0){
         bigPicY -= 1
     }
 
