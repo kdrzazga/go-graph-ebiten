@@ -52,7 +52,7 @@ func stage4(screen *ebiten.Image, counter float64){
         bigPicY -= 1
     }
 
-    drawBackground(screen, bigPic, -20, bigPicY, 730,811)
+    drawBackground(screen, bigPic, 0, bigPicY, 940,811)
 
     if (counter < 2000 + stage3Timeout) {
         returnOfFuryAnimator.Update()
