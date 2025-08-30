@@ -60,7 +60,7 @@ func initStage4(){
     extraDelay = 0
     bigPicY = 2500
     shiftX4 = 0
-    bruceleePosition = 1700
+    bruceleePosition = -20
 }
 
 func stage4(screen *ebiten.Image, counter float64){
@@ -71,9 +71,11 @@ func stage4(screen *ebiten.Image, counter float64){
     }
 
     if (counter > (30000 + stage3Timeout)){
-        bruceleePosition -=1
+        bruceleePosition +=2
 
-        drawBackgroundScaled(screen, flyingKickPic, bruceleePosition, 0, 360, 200, float64(1))
+        op := &ebiten.DrawImageOptions{}
+        op.GeoM.Translate(float64(bruceleePosition), float64(350))
+        screen.DrawImage(flyingKickPic, op)
         drawBackgroundScaled(screen, c64Pic, 0, 0, 1200, 722, float64(1))
     } else if (counter > (25000 + stage3Timeout)){
         bigPicY += 2
