@@ -15,7 +15,8 @@ var (
 	bigPic      *ebiten.Image
 	c64Pic      *ebiten.Image
 	bigPicY     int
-	extraDelay  int
+	shiftX4      int
+	extraDelay      int
 )
 
 func initStage4(){
@@ -52,6 +53,7 @@ func initStage4(){
 
     extraDelay = 0
     bigPicY = 2500
+    shiftX4 = 0
 }
 
 func stage4(screen *ebiten.Image, counter float64){
@@ -61,27 +63,37 @@ func stage4(screen *ebiten.Image, counter float64){
         bigPicY -= 1
     }
 
-    drawBackground(screen, bigPic, 0, bigPicY, 940,811)
+    if (counter > (30000 + stage3Timeout)){
+        drawBackgroundScaled(screen, c64Pic, 0, 0, 1200, 722, float64(1))
+    } else if (counter > (25000 + stage3Timeout)){
+        bigPicY +=2
+    } else if (counter > 15000 + stage3Timeout){
+        shiftX4 -= 1
+    }
+
+     if (counter < (30000 + stage3Timeout)){
+        drawBackground(screen, bigPic, shiftX4, bigPicY, 940,811)
+     }
 
     if (counter < 2000 + stage3Timeout) {
         returnOfFuryAnimator.Update()
-        returnOfFuryAnimator.Draw(screen, 0, 0)
+        returnOfFuryAnimator.Draw(screen, float64(shiftX4), 0)
     } else if ((counter < 3000 + stage3Timeout) || (counter > 12000 + stage3Timeout && counter < 13000 + stage3Timeout)) {
-        drawBackgroundScaled(screen, returnOfFuryImg, 0, 0, 400, 245, float64(1))
+        drawBackgroundScaled(screen, returnOfFuryImg, 0, 0, 400+shiftX4, 245, float64(1))
         chuckNorrisAnimator.Update()
-        chuckNorrisAnimator.Draw(screen, 400, 245)
+        chuckNorrisAnimator.Draw(screen, 400+float64(shiftX4), 245)
     } else if (counter < 8300 + stage3Timeout){
-        drawBackgroundScaled(screen, returnOfFuryImg, 0, 0, 400, 245, float64(1))
-        chuckNorrisAnimator.Draw(screen, 400, 245)
+        drawBackgroundScaled(screen, returnOfFuryImg, 0, 0, 400+shiftX4, 245, float64(1))
+        chuckNorrisAnimator.Draw(screen, 400+float64(shiftX4), 245)
         kickingAnimator.Update()
-        kickingAnimator.Draw(screen, 10, 245+280)
-    } else {
-        drawBackgroundScaled(screen, returnOfFuryImg, 0, 0, 400, 245, float64(1))
-        chuckNorrisAnimator.Draw(screen, 400, 245)
+        kickingAnimator.Draw(screen, 10+float64(shiftX4), 245+280)
+    } else if (counter < 30000 + stage3Timeout){
+        drawBackgroundScaled(screen, returnOfFuryImg, shiftX4, 0, 400, 245, float64(1))
+        chuckNorrisAnimator.Draw(screen, 400+float64(shiftX4), 245)
 
-        kickingAnimator.Draw(screen, 10, 245+280)
+        kickingAnimator.Draw(screen, 10+float64(shiftX4), 245+280)
 
-        kickdownAnimator.Draw(screen, 400+468, 245+280)
+        kickdownAnimator.Draw(screen, 400+468+float64(shiftX4), 245+280)
         kickdownAnimator.Update()
         chuckNorrisAnimator.Reset()
     }
