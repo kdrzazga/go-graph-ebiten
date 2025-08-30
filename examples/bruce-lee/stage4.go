@@ -12,11 +12,13 @@ var (
     kickdownAnimator *GIFAnimator
     kickingAnimator *GIFAnimator
     returnOfFuryImg *ebiten.Image
-	bigPic      *ebiten.Image
-	c64Pic      *ebiten.Image
-	bigPicY     int
-	shiftX4      int
-	extraDelay      int
+	bigPic          *ebiten.Image
+	c64Pic          *ebiten.Image
+	flyingKickPic   *ebiten.Image
+	bigPicY             int
+	shiftX4             int
+	extraDelay          int
+	bruceleePosition    int
 )
 
 func initStage4(){
@@ -50,10 +52,15 @@ func initStage4(){
     if err != nil {
         log.Fatal(err)
     }
+    flyingKickPic, err = loadImage("pics/fk.png")
+    if err != nil {
+        log.Fatal(err)
+    }
 
     extraDelay = 0
     bigPicY = 2500
     shiftX4 = 0
+    bruceleePosition = 1700
 }
 
 func stage4(screen *ebiten.Image, counter float64){
@@ -64,16 +71,19 @@ func stage4(screen *ebiten.Image, counter float64){
     }
 
     if (counter > (30000 + stage3Timeout)){
+        bruceleePosition -=1
+
+        drawBackgroundScaled(screen, flyingKickPic, bruceleePosition, 0, 360, 200, float64(1))
         drawBackgroundScaled(screen, c64Pic, 0, 0, 1200, 722, float64(1))
     } else if (counter > (25000 + stage3Timeout)){
-        bigPicY +=2
+        bigPicY += 2
     } else if (counter > 15000 + stage3Timeout){
         shiftX4 -= 1
     }
 
-     if (counter < (30000 + stage3Timeout)){
+    if (counter < (30000 + stage3Timeout)){
         drawBackground(screen, bigPic, shiftX4, bigPicY, 940,811)
-     }
+    }
 
     if (counter < 2000 + stage3Timeout) {
         returnOfFuryAnimator.Update()
