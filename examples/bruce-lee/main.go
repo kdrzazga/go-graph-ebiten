@@ -46,9 +46,9 @@ const (
     stage1Timeout = 5000
     stage2Timeout = 1900 + stage1Timeout
     stage3Timeout = 24000 + stage2Timeout
-    stage4Timeout = 35000 + stage3Timeout
+    stage4Timeout = 48000 + stage3Timeout
 
-    final = stage4Timeout + 23000
+    final = stage4Timeout + 10000
 
     stage2MusicPath = "audio/Boards dont hit back.wav"
     stage3MusicPath = "audio/BruceLee.wav"
