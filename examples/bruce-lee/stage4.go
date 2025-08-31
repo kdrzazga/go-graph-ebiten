@@ -11,6 +11,7 @@ var (
     chuckNorrisAnimator *GIFAnimator
     kickdownAnimator *GIFAnimator
     kickingAnimator *GIFAnimator
+    c64gameAnimator *GIFAnimator
     returnOfFuryImg *ebiten.Image
 	bigPic          *ebiten.Image
 	c64Pic          *ebiten.Image
@@ -56,11 +57,15 @@ func initStage4(){
     if err != nil {
         log.Fatal(err)
     }
+    c64gameAnimator, err = NewGIFAnimator("pics/c64game.gif", false)
+    if err != nil {
+        log.Fatal(err)
+    }
 
     extraDelay = 0
     bigPicY = 2500
     shiftX4 = 0
-    bruceleePosition = -20
+    bruceleePosition = -4500
 }
 
 func stage4(screen *ebiten.Image, counter float64){
@@ -75,8 +80,12 @@ func stage4(screen *ebiten.Image, counter float64){
 
         op := &ebiten.DrawImageOptions{}
         op.GeoM.Translate(float64(bruceleePosition), float64(350))
-        screen.DrawImage(flyingKickPic, op)
+        if (bruceleePosition > -120){
+            screen.DrawImage(flyingKickPic, op)
+        }
         drawBackgroundScaled(screen, c64Pic, 0, 0, 1200, 722, float64(1))
+        c64gameAnimator.Draw(screen, float64(606), float64(224))
+        c64gameAnimator.Update()
     } else if (counter > (25000 + stage3Timeout)){
         bigPicY += 2
     } else if (counter > 15000 + stage3Timeout){
