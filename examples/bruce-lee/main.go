@@ -46,9 +46,10 @@ const (
     stage1Timeout = 5000
     stage2Timeout = 1900 + stage1Timeout
     stage3Timeout = 24000 + stage2Timeout
-    stage4Timeout = 70000 + stage3Timeout
+    stage4Timeout = 50000 + stage3Timeout
+    stageOutroTimeout = stage4Timeout + 15000
 
-    final = stage4Timeout + 1000
+    final = stageOutroTimeout + 1000
 
     stage2MusicPath = "audio/Boards dont hit back.wav"
     stage3MusicPath = "audio/BruceLee.wav"
@@ -106,6 +107,7 @@ func init() {
 
 	initStage3()
 	initStage4()
+	initStageOutro()
 }
 
 func initAudio(path string) (*audio.Player, error) {
@@ -170,6 +172,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
         stage3(screen, counter)
     } else if (counter < stage4Timeout) {
         stage4(screen, counter)
+    }else  {
+        stageOutro(screen)
     }
 }
 
