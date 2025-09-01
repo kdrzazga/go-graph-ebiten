@@ -26,7 +26,7 @@ func initStageOutro(){
 func stageOutro(screen *ebiten.Image){
     screen.Fill(color.RGBA{R: 72, G: 58, B: 170, A: 255})
     outro(screen, stage4Counter)
-	drawBackground(screen, gameOverPic, 0, 0, 583, 138)
+	drawBackground(screen, gameOverPic, 0, 0, 1583, 138)
     stage4Counter +=1
 }
 
@@ -48,5 +48,5 @@ func outro(screen *ebiten.Image, counter float64){
     msg += "retro computing alive and thriving!"
     y := 1000 - stage4Counter
     //log.Printf("Outro will be displayed at y=%f", y)
-    animateText(screen, msg, 30, 610, y)
+    animateText(screen, msg, 30, 10, y)
 }
