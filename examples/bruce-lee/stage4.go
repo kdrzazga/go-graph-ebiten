@@ -75,6 +75,10 @@ func stage4(screen *ebiten.Image, counter float64){
         bigPicY -= 1
     }
 
+    if (counter > 40000+ stage3Timeout){
+        outro(screen, counter)
+    }
+
     if (counter > (30000 + stage3Timeout)){
         bruceleePosition +=2
 
@@ -127,4 +131,9 @@ func stage4(screen *ebiten.Image, counter float64){
         	log.Fatal(err)
         }
     }
+}
+
+func outro(screen *ebiten.Image, counter float64){
+    msg := "Greetings to K&A+ team (including Pan Areczek)...."
+    log.Println(msg)
 }
