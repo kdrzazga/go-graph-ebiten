@@ -20,6 +20,7 @@ var (
 	shiftX4             int
 	extraDelay          int
 	bruceleePosition    int
+	stage4Counter       float64
 )
 
 func initStage4(){
@@ -66,17 +67,19 @@ func initStage4(){
     bigPicY = 2500
     shiftX4 = 0
     bruceleePosition = -4500
+    stage4Counter = 0
 }
 
 func stage4(screen *ebiten.Image, counter float64){
     extraDelay += 1
+    stage4Counter += 1
     //log.Println(extraDelay, (extraDelay % 3), (extraDelay %3 == 0), bigPicY)
     if (extraDelay % 4 > 0 && bigPicY > 0){
         bigPicY -= 1
     }
 
     if (counter > 40000+ stage3Timeout){
-        outro(screen, counter)
+        outro(screen, stage4Counter)
     }
 
     if (counter > (30000 + stage3Timeout)){
@@ -134,6 +137,10 @@ func stage4(screen *ebiten.Image, counter float64){
 }
 
 func outro(screen *ebiten.Image, counter float64){
-    msg := "Greetings to K&A+ team (including Pan Areczek)...."
-    log.Println(msg)
+    msg := "Greetings to K&A+ team (including Pan Areczek)....\n"
+    msg += "\n Kudoz for publishing a great magazine\n"
+    msg += "\n i w ogóle super fchuj"
+    y := 8800 - stage4Counter
+    log.Printf("Outro will be displayed at y=%f", y)
+    animateText(screen, msg, 30, 610, y)
 }
