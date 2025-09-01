@@ -5,6 +5,7 @@ import (
 	"image"
 	_ "image/jpeg"
 	"time"
+	"flag"
 	"log"
 	"os"
 	"runtime"
@@ -45,9 +46,9 @@ const (
     stage1Timeout = 5000
     stage2Timeout = 1900 + stage1Timeout
     stage3Timeout = 24000 + stage2Timeout
-    stage4Timeout = 35000 + stage3Timeout
+    stage4Timeout = 70000 + stage3Timeout
 
-    final = stage4Timeout
+    final = stage4Timeout + 1000
 
     stage2MusicPath = "audio/Boards dont hit back.wav"
     stage3MusicPath = "audio/BruceLee.wav"
@@ -57,7 +58,6 @@ const (
 )
 
 func init() {
-    startTime = time.Now()
 
     shiftX = 0
     shiftY = 0
@@ -179,11 +179,31 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 }
 
 func main() {
+    startTime = time.Now()
+
+    analyzeArguments()
+
     ebiten.SetFullscreen(true)
-	ebiten.SetWindowTitle("Fullscreen (Ebitengine Demo)")
+	ebiten.SetWindowTitle("BRUCE LEE TRIBUTE")
 	if err := ebiten.RunGame(&Game{}); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func analyzeArguments(){
+    name := flag.String("stage", "1", "a number of stage to start with")
+    flag.Parse()
+    stage := string(*name)
+    switch(stage){
+        case "2":
+            counter = stage1Timeout
+        case "3":
+            counter = stage2Timeout
+        case "4":
+            counter = stage3Timeout
+        case "4.5":
+            counter = 30000 + stage3Timeout
+    }
 }
 
 func drawBackgroundScaled(screen, bg *ebiten.Image, x, y, w, h int, scale float64) {
