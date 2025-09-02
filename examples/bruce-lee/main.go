@@ -207,6 +207,8 @@ func analyzeArguments(){
             counter = stage3Timeout
         case "4.5":
             counter = 30000 + stage3Timeout
+        case "outro":
+            counter = stage4Timeout
     }
 }
 
