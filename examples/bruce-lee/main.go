@@ -46,7 +46,7 @@ const (
     stage1Timeout = 5000
     stage2Timeout = 1900 + stage1Timeout
     stage3Timeout = 24000 + stage2Timeout
-    stage4Timeout = 50000 + stage3Timeout
+    stage4Timeout = 53000 + stage3Timeout
     stageOutroTimeout = stage4Timeout + 9000
 
     final = stageOutroTimeout + 100

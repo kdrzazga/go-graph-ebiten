@@ -135,8 +135,15 @@ func stage4(screen *ebiten.Image, counter float64){
 func drawRealBruceLee(screen *ebiten.Image, position float64) {
     op := &ebiten.DrawImageOptions{}
     op.GeoM.Reset()
-    op.GeoM.Translate(position, 350)
-    screen.DrawImage(flyingKickPic, op)
+    translation := float64(0)
+    if (position > 900){
+        translation = 193
+    }
+
+    if (position < 850-193 || position > 930){
+        op.GeoM.Translate(position - translation, 350)
+        screen.DrawImage(flyingKickPic, op)
+    }
 }
 
 func drawC64BruceLee(screen *ebiten.Image, position float64) {
