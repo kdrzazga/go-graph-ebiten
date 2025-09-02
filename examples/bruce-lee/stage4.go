@@ -16,6 +16,7 @@ var (
 	bigPic          *ebiten.Image
 	c64Pic          *ebiten.Image
 	flyingKickPic   *ebiten.Image
+	bleePic   *ebiten.Image
 	bigPicY             int
 	shiftX4             int
 	extraDelay          int
@@ -57,6 +58,10 @@ func initStage4(){
     if err != nil {
         log.Fatal(err)
     }
+    bleePic, err = loadImage("pics/blee.png")
+    if err != nil {
+        log.Fatal(err)
+    }
     c64gameAnimator, err = NewGIFAnimator("pics/c64game.gif", false)
     if err != nil {
         log.Fatal(err)
@@ -75,16 +80,15 @@ func stage4(screen *ebiten.Image, counter float64){
         bigPicY -= 1
     }
     if (counter > (30000 + stage3Timeout)){
-        bruceleePosition +=2
+        bruceleePosition += 2
 
-        op := &ebiten.DrawImageOptions{}
-        op.GeoM.Translate(float64(bruceleePosition), float64(350))
-        if (bruceleePosition > -120){
-            screen.DrawImage(flyingKickPic, op)
+        drawRealBruceLee(screen, float64(bruceleePosition))
+        drawAnimator(screen, 606, 224)
+        if (bruceleePosition > 550 - 60 && bruceleePosition < 1030 - 60){
+             drawC64BruceLee(screen, float64(bruceleePosition+30))
         }
-        drawBackgroundScaled(screen, c64Pic, 0, 0, 1200, 722, float64(1))
-        c64gameAnimator.Draw(screen, float64(606), float64(224))
-        c64gameAnimator.Update()
+        drawC64(screen)
+
     } else if (counter > (25000 + stage3Timeout)){
         bigPicY += 2
     } else if (counter > 15000 + stage3Timeout){
@@ -126,6 +130,30 @@ func stage4(screen *ebiten.Image, counter float64){
         	log.Fatal(err)
         }
     }
+}
+
+func drawRealBruceLee(screen *ebiten.Image, position float64) {
+    op := &ebiten.DrawImageOptions{}
+    op.GeoM.Reset()
+    op.GeoM.Translate(position, 350)
+    screen.DrawImage(flyingKickPic, op)
+}
+
+func drawC64BruceLee(screen *ebiten.Image, position float64) {
+    op := &ebiten.DrawImageOptions{}
+    op.GeoM.Reset()
+    op.GeoM.Translate(2*position, 2*432) // 350 + 30
+    op.GeoM.Scale(0.5, 0.5)
+    screen.DrawImage(bleePic, op)
+}
+
+func drawAnimator(screen *ebiten.Image, x, y float64) {
+    c64gameAnimator.Draw(screen, x, y)
+    c64gameAnimator.Update()
+}
+
+func drawC64(screen *ebiten.Image) {
+    drawBackgroundScaled(screen, c64Pic, 0, 0, 1200, 722, 1)
 }
 
 
