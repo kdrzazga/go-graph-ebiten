@@ -38,12 +38,8 @@ func outro(screen *ebiten.Image, counter float64){
     msg += "Your dedication and passion shine through in every issue,\n"
     msg += "making K&A+ a true treasure for enthusiasts of retro computers,\n"
     msg += "Commodore, Amiga, and beyond.\n"
-    msg += "The team’s deep knowledge, meticulous research, and love for\n"
-    msg += "vintage technology are evident in the high-quality content you produce.\n"
-    msg += "Arek, Leon, Maciek, Tomxx, and Beszcza — each of you bring\n"
+    msg += "Arek, Leon, Maciek, Tomxx, PHowiec and Beszcza — each of you bring\n"
     msg += "unique expertise and enthusiasm that contribute to the magazine’s success.\n"
-    msg += "Your collective effort preserves the history and culture of\n"
-    msg += "classic computing, inspiring both seasoned fans and newcomers alike.\n"
     msg += "Keep up the fantastic work—your passion keeps the spirit of\n"
     msg += "retro computing alive and thriving!"
     y := 1000 - stage4Counter
