@@ -27,16 +27,16 @@ var (
 	pic2nun     *ebiten.Image
 	pic3nun     *ebiten.Image
 	pic4        *ebiten.Image
-	projectileImg        *ebiten.Image
+	projectileImg   *ebiten.Image
 	mplusFaceSource *text.GoTextFaceSource
-    context *audio.Context
-    player  *audio.Player
-    player2  *audio.Player
-    themePlayer  *audio.Player
-    counter float64
+    context         *audio.Context
+    player          *audio.Player
+    player2         *audio.Player
+    themePlayer     *audio.Player
+    counter         float64
 
-    shiftX int
-    shiftY int
+    shiftX       int
+    shiftY       int
     currentStage int
 
     startTime time.Time
