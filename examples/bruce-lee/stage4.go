@@ -16,11 +16,11 @@ var (
 	bigPic          *ebiten.Image
 	c64Pic          *ebiten.Image
 	flyingKickPic   *ebiten.Image
+	bleePic   *ebiten.Image
 	bigPicY             int
 	shiftX4             int
 	extraDelay          int
 	bruceleePosition    int
-	stage4Counter       float64
 )
 
 func initStage4(){
@@ -58,6 +58,10 @@ func initStage4(){
     if err != nil {
         log.Fatal(err)
     }
+    bleePic, err = loadImage("pics/blee.png")
+    if err != nil {
+        log.Fatal(err)
+    }
     c64gameAnimator, err = NewGIFAnimator("pics/c64game.gif", false)
     if err != nil {
         log.Fatal(err)
@@ -67,32 +71,24 @@ func initStage4(){
     bigPicY = 2500
     shiftX4 = 0
     bruceleePosition = -4500
-    stage4Counter = 0
 }
 
 func stage4(screen *ebiten.Image, counter float64){
     extraDelay += 1
-    stage4Counter += 1
     //log.Println(extraDelay, (extraDelay % 3), (extraDelay %3 == 0), bigPicY)
     if (extraDelay % 4 > 0 && bigPicY > 0){
         bigPicY -= 1
     }
-
-    if (counter > 50000+ stage3Timeout){
-        outro(screen, stage4Counter)
-    }
-
     if (counter > (30000 + stage3Timeout)){
-        bruceleePosition +=2
+        bruceleePosition += 2
 
-        op := &ebiten.DrawImageOptions{}
-        op.GeoM.Translate(float64(bruceleePosition), float64(350))
-        if (bruceleePosition > -120){
-            screen.DrawImage(flyingKickPic, op)
+        drawRealBruceLee(screen, float64(bruceleePosition))
+        drawAnimator(screen, 606, 224)
+        if (bruceleePosition > 550 - 60 && bruceleePosition < 1030 - 60){
+             drawC64BruceLee(screen, float64(bruceleePosition+30))
         }
-        drawBackgroundScaled(screen, c64Pic, 0, 0, 1200, 722, float64(1))
-        c64gameAnimator.Draw(screen, float64(606), float64(224))
-        c64gameAnimator.Update()
+        drawC64(screen)
+
     } else if (counter > (25000 + stage3Timeout)){
         bigPicY += 2
     } else if (counter > 15000 + stage3Timeout){
@@ -136,21 +132,35 @@ func stage4(screen *ebiten.Image, counter float64){
     }
 }
 
-func outro(screen *ebiten.Image, counter float64){
-    msg := "Greetings to K&A+ team (including Pan Areczek)....\n"
-    msg += "\nKudoz for publishing a great magazine!\n"
-    msg += "Your dedication and passion shine through in every issue,\n"
-    msg += "making K&A+ a true treasure for enthusiasts of retro computers,\n"
-    msg += "Commodore, Amiga, and beyond.\n"
-    msg += "The team’s deep knowledge, meticulous research, and love for\n"
-    msg += "vintage technology are evident in the high-quality content you produce.\n"
-    msg += "Arek, Leon, Maciek, Tomxx, and Beszcza — each of you bring\n"
-    msg += "unique expertise and enthusiasm that contribute to the magazine’s success.\n"
-    msg += "Your collective effort preserves the history and culture of\n"
-    msg += "classic computing, inspiring both seasoned fans and newcomers alike.\n"
-    msg += "Keep up the fantastic work—your passion keeps the spirit of\n"
-    msg += "retro computing alive and thriving!"
-    y := 8900 - stage4Counter
-    //log.Printf("Outro will be displayed at y=%f", y)
-    animateText(screen, msg, 30, 610, y)
+func drawRealBruceLee(screen *ebiten.Image, position float64) {
+    op := &ebiten.DrawImageOptions{}
+    op.GeoM.Reset()
+    translation := float64(0)
+    if (position > 900){
+        translation = 193
+    }
+
+    if (position < 850-193 || position > 930){
+        op.GeoM.Translate(position - translation, 350)
+        screen.DrawImage(flyingKickPic, op)
+    }
 }
+
+func drawC64BruceLee(screen *ebiten.Image, position float64) {
+    op := &ebiten.DrawImageOptions{}
+    op.GeoM.Reset()
+    op.GeoM.Translate(2*position, 2*432) // 350 + 30
+    op.GeoM.Scale(0.5, 0.5)
+    screen.DrawImage(bleePic, op)
+}
+
+func drawAnimator(screen *ebiten.Image, x, y float64) {
+    c64gameAnimator.Draw(screen, x, y)
+    c64gameAnimator.Update()
+}
+
+func drawC64(screen *ebiten.Image) {
+    drawBackgroundScaled(screen, c64Pic, 0, 0, 1200, 722, 1)
+}
+
+

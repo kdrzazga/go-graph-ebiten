@@ -25,7 +25,11 @@ require (
 )
 
 require (
+	github.com/gen2brain/shm v0.1.0 // indirect
+	github.com/godbus/dbus/v5 v5.1.0 // indirect
 	github.com/jfreymuth/vorbis v1.0.2 // indirect
+	github.com/kbinani/screenshot v0.0.0-20250624051815-089614a94018 // indirect
+	github.com/lxn/win v0.0.0-20210218163916-a377121e959e // indirect
 	github.com/pierrec/lz4/v4 v4.1.22 // indirect
 	golang.org/x/mod v0.27.0 // indirect
 )

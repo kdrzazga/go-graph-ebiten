@@ -27,16 +27,16 @@ var (
 	pic2nun     *ebiten.Image
 	pic3nun     *ebiten.Image
 	pic4        *ebiten.Image
-	projectileImg        *ebiten.Image
+	projectileImg   *ebiten.Image
 	mplusFaceSource *text.GoTextFaceSource
-    context *audio.Context
-    player  *audio.Player
-    player2  *audio.Player
-    themePlayer  *audio.Player
-    counter float64
+    context         *audio.Context
+    player          *audio.Player
+    player2         *audio.Player
+    themePlayer     *audio.Player
+    counter         float64
 
-    shiftX int
-    shiftY int
+    shiftX       int
+    shiftY       int
     currentStage int
 
     startTime time.Time
@@ -46,9 +46,10 @@ const (
     stage1Timeout = 5000
     stage2Timeout = 1900 + stage1Timeout
     stage3Timeout = 24000 + stage2Timeout
-    stage4Timeout = 70000 + stage3Timeout
+    stage4Timeout = 53000 + stage3Timeout
+    stageOutroTimeout = stage4Timeout + 9000
 
-    final = stage4Timeout + 1000
+    final = stageOutroTimeout + 100
 
     stage2MusicPath = "audio/Boards dont hit back.wav"
     stage3MusicPath = "audio/BruceLee.wav"
@@ -64,7 +65,7 @@ func init() {
 
     context = audio.NewContext(44100)
 
-    logo, err = loadImage("pics/bruce-lee3.png")
+    logo, err = loadImage("pics/orange-flying-kick.png")
     if err != nil {
         log.Fatal(err)
     }
@@ -106,6 +107,7 @@ func init() {
 
 	initStage3()
 	initStage4()
+	initStageOutro()
 }
 
 func initAudio(path string) (*audio.Player, error) {
@@ -170,6 +172,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
         stage3(screen, counter)
     } else if (counter < stage4Timeout) {
         stage4(screen, counter)
+    }else  {
+        stageOutro(screen)
     }
 }
 
@@ -203,6 +207,8 @@ func analyzeArguments(){
             counter = stage3Timeout
         case "4.5":
             counter = 30000 + stage3Timeout
+        case "outro":
+            counter = stage4Timeout
     }
 }
 
