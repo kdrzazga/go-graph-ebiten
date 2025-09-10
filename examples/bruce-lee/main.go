@@ -65,7 +65,7 @@ func init() {
 
     context = audio.NewContext(44100)
 
-    logo, err = loadImage("pics/bruce-lee3.png")
+    logo, err = loadImage("pics/orange-flying-kick.png")
     if err != nil {
         log.Fatal(err)
     }
