@@ -28,6 +28,7 @@ var (
 	pic4                *ebiten.Image
 	projectileImg       *ebiten.Image
 	orangeFlyingKickImg *ebiten.Image
+	orangeFlyingKickGif *GIFAnimator
 	mplusFaceSource     *text.GoTextFaceSource
     context         *audio.Context
     player          *audio.Player
@@ -66,6 +67,11 @@ func init() {
     context = audio.NewContext(44100)
 
     orangeFlyingKickImg, err = loadImage("pics/orange-flying-kick.png")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    orangeFlyingKickGif, err = NewGIFAnimator("pics/orange-flying-kick.gif", false)
     if err != nil {
         log.Fatal(err)
     }

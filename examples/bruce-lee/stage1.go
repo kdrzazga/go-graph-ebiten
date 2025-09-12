@@ -31,7 +31,15 @@ func stage1(screen *ebiten.Image, counter float64) {
         pos = 20
     }
 
-    drawBackground(screen, pic, pos - 200, pos-99, 2555, 705)
+    if (pic == orangeFlyingKickImg){
+        orangeFlyingKickGif.Draw(screen, float64(0), float64(0));
+
+        if (counter / 5 > float64(0.1)){
+            orangeFlyingKickGif.Update();
+        }
+    } else {
+        drawBackground(screen, pic, pos - 200, pos-99, 2555, 705)
+    }
 
     if player == nil{
         player, err = initAudio(stage2MusicPath)
