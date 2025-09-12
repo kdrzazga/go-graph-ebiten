@@ -11,6 +11,7 @@ import (
     "strings"
 
     "golang.org/x/image/draw"
+    "golang.org/x/image/bmp"
 )
 
 func main() {
@@ -30,7 +31,8 @@ func main() {
         if file.IsDir() {
             continue
         }
-        if strings.ToLower(filepath.Ext(file.Name())) != ".png" {
+        ext := strings.ToLower(filepath.Ext(file.Name()))
+        if ext != ".png" && ext != ".bmp" {
             continue
         }
 
@@ -52,9 +54,22 @@ func processImage(inputPath, outputPath string) error {
     }
     defer infile.Close()
 
-    img, err := png.Decode(infile)
-    if err != nil {
-        return fmt.Errorf("failed to decode PNG: %w", err)
+    ext := strings.ToLower(filepath.Ext(inputPath))
+    var img image.Image
+
+    switch ext {
+    case ".png":
+        img, err = png.Decode(infile)
+        if err != nil {
+            return fmt.Errorf("failed to decode PNG: %w", err)
+        }
+    case ".bmp":
+        img, err = bmp.Decode(infile)
+        if err != nil {
+            return fmt.Errorf("failed to decode BMP: %w", err)
+        }
+    default:
+        return fmt.Errorf("unsupported file extension: %s", ext)
     }
 
     newWidth := img.Bounds().Dx() * 2
@@ -69,8 +84,15 @@ func processImage(inputPath, outputPath string) error {
     }
     defer outFile.Close()
 
-    if err := png.Encode(outFile, scaledImg); err != nil {
-        return fmt.Errorf("failed to encode PNG: %w", err)
+    switch ext {
+    case ".png":
+        if err := png.Encode(outFile, scaledImg); err != nil {
+            return fmt.Errorf("failed to encode PNG: %w", err)
+        }
+    case ".bmp":
+        if err := bmp.Encode(outFile, scaledImg); err != nil {
+            return fmt.Errorf("failed to encode BMP: %w", err)
+        }
     }
 
     return nil
