@@ -33,10 +33,7 @@ func stage1(screen *ebiten.Image, counter float64) {
 
     if (pic == orangeFlyingKickImg){
         orangeFlyingKickGif.Draw(screen, float64(0), float64(0));
-
-        if (counter / 5 > float64(0.1)){
-            orangeFlyingKickGif.Update();
-        }
+        orangeFlyingKickGif.Update();
     } else {
         drawBackground(screen, pic, pos - 200, pos-99, 2555, 705)
     }

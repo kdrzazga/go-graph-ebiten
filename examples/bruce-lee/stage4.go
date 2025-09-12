@@ -149,7 +149,7 @@ func drawRealBruceLee(screen *ebiten.Image, position float64) {
 func drawC64BruceLee(screen *ebiten.Image, position float64) {
     op := &ebiten.DrawImageOptions{}
     op.GeoM.Reset()
-    op.GeoM.Translate(2*position, 2*432) // 350 + 30
+    op.GeoM.Translate(2*position + 20, 2*432) // 350 + 30
     op.GeoM.Scale(0.5, 0.5)
     screen.DrawImage(bleePic, op)
 }
