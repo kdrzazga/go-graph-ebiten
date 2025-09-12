@@ -23,11 +23,11 @@ func stage1(screen *ebiten.Image, counter float64) {
     case counter < 4000:
         pic = pic3nun
     default:
-        pic = logo
+        pic = orangeFlyingKickImg
     }
 
     pos :=  int((counter)/15)
-    if (pic == logo || pic == pic3nun){
+    if (pic == orangeFlyingKickImg || pic == pic3nun){
         pos = 20
     }
 

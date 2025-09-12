@@ -19,16 +19,16 @@ import (
 )
 
 var (
-    err         error
-	logo        *ebiten.Image
-	background  *ebiten.Image
-	background2 *ebiten.Image
-	pic1nun     *ebiten.Image
-	pic2nun     *ebiten.Image
-	pic3nun     *ebiten.Image
-	pic4        *ebiten.Image
-	projectileImg   *ebiten.Image
-	mplusFaceSource *text.GoTextFaceSource
+    err                         error
+	background          *ebiten.Image
+	background2         *ebiten.Image
+	pic1nun             *ebiten.Image
+	pic2nun             *ebiten.Image
+	pic3nun             *ebiten.Image
+	pic4                *ebiten.Image
+	projectileImg       *ebiten.Image
+	orangeFlyingKickImg *ebiten.Image
+	mplusFaceSource     *text.GoTextFaceSource
     context         *audio.Context
     player          *audio.Player
     player2         *audio.Player
@@ -65,7 +65,7 @@ func init() {
 
     context = audio.NewContext(44100)
 
-    logo, err = loadImage("pics/orange-flying-kick.png")
+    orangeFlyingKickImg, err = loadImage("pics/orange-flying-kick.png")
     if err != nil {
         log.Fatal(err)
     }
