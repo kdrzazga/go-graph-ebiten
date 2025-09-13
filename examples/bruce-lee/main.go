@@ -1,6 +1,7 @@
 package main
 
 import (
+    "runtime"
 	"bytes"
 	"image"
 	_ "image/jpeg"
@@ -8,27 +9,27 @@ import (
 	"flag"
 	"log"
 	"os"
-	"runtime"
 
 	"github.com/hajimehoshi/ebiten/v2"
     "github.com/hajimehoshi/ebiten/v2/audio"
-    "github.com/hajimehoshi/ebiten/v2/audio/wav"
-	"github.com/hajimehoshi/ebiten/v2/examples/resources/fonts"
-	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/hajimehoshi/ebiten/v2/text/v2"
+    "github.com/hajimehoshi/ebiten/v2/audio/wav"
+	"github.com/hajimehoshi/ebiten/v2/inpututil"
+	"github.com/hajimehoshi/ebiten/v2/examples/resources/fonts"
 )
 
 var (
-    err         error
-	logo        *ebiten.Image
-	background  *ebiten.Image
-	background2 *ebiten.Image
-	pic1nun     *ebiten.Image
-	pic2nun     *ebiten.Image
-	pic3nun     *ebiten.Image
-	pic4        *ebiten.Image
-	projectileImg   *ebiten.Image
-	mplusFaceSource *text.GoTextFaceSource
+    err                         error
+	background          *ebiten.Image
+	background2         *ebiten.Image
+	pic1nun             *ebiten.Image
+	pic2nun             *ebiten.Image
+	pic3nun             *ebiten.Image
+	pic4                *ebiten.Image
+	projectileImg       *ebiten.Image
+	orangeFlyingKickImg *ebiten.Image
+	orangeFlyingKickGif *GIFAnimator
+	mplusFaceSource     *text.GoTextFaceSource
     context         *audio.Context
     player          *audio.Player
     player2         *audio.Player
@@ -59,25 +60,23 @@ const (
 )
 
 func init() {
+    ebiten.SetCursorMode(ebiten.CursorModeHidden)
 
     shiftX = 0
     shiftY = 0
 
     context = audio.NewContext(44100)
 
-    logo, err = loadImage("pics/orange-flying-kick.png")
+    orangeFlyingKickImg, err = loadImage("pics/orange-flying-kick.png")
     if err != nil {
         log.Fatal(err)
     }
 
-    background2, err = loadImage("pics/brusli2.png")
+    orangeFlyingKickGif, err = NewGIFAnimator("pics/orange-flying-kick.gif", false)
     if err != nil {
         log.Fatal(err)
     }
-    background, err = loadImage("pics/brusli.png")
-    if err != nil {
-        log.Fatal(err)
-    }
+
     pic1nun, err = loadImage("pics/bruce-lee-nunchako1.png")
     if err != nil {
         log.Fatal(err)

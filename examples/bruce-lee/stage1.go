@@ -23,15 +23,20 @@ func stage1(screen *ebiten.Image, counter float64) {
     case counter < 4000:
         pic = pic3nun
     default:
-        pic = logo
+        pic = orangeFlyingKickImg
     }
 
     pos :=  int((counter)/15)
-    if (pic == logo || pic == pic3nun){
+    if (pic == orangeFlyingKickImg || pic == pic3nun){
         pos = 20
     }
 
-    drawBackground(screen, pic, pos - 200, pos-99, 2555, 705)
+    if (pic == orangeFlyingKickImg){
+        orangeFlyingKickGif.Draw(screen, float64(0), float64(0));
+        orangeFlyingKickGif.Update();
+    } else {
+        drawBackground(screen, pic, pos - 200, pos-99, 2555, 705)
+    }
 
     if player == nil{
         player, err = initAudio(stage2MusicPath)

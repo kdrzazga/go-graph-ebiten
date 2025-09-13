@@ -37,11 +37,7 @@ func outro(screen *ebiten.Image, counter float64){
     msg += "\nKudoz for publishing a great magazine!\n"
     msg += "Your dedication and passion shine through in every issue,\n"
     msg += "making K&A+ a true treasure for enthusiasts of retro computers,\n"
-    msg += "Commodore, Amiga, and beyond.\n"
-    msg += "Arek, Leon, Maciek, Tomxx, PHowiec and Beszcza — each of you bring\n"
-    msg += "unique expertise and enthusiasm that contribute to the magazine’s success.\n"
-    msg += "Keep up the fantastic work—your passion keeps the spirit of\n"
-    msg += "retro computing alive and thriving!"
+    msg += "Commodore, Amiga, and beyond.\n\n"
     y := 1000 - stage4Counter
     //log.Printf("Outro will be displayed at y=%f", y)
     animateText(screen, msg, 30, 10, y)

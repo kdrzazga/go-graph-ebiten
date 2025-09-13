@@ -1,16 +1,16 @@
 package main
 
 import (
+	"runtime"
 	"image/color"
 	_ "image/jpeg"
-	"runtime"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/text/v2"
 )
 
 func stage2(screen *ebiten.Image) {
-	drawBackground(screen, logo, 20 - 200, 20-99, 2555, 705)
+	drawBackground(screen, orangeFlyingKickImg, 20 - 200, 20-99, 2555, 705)
     msg := "Entering castle of the SORCERER...\n"
 
 	if runtime.GOOS == "js" {

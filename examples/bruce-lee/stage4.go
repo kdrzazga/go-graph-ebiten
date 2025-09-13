@@ -16,7 +16,7 @@ var (
 	bigPic          *ebiten.Image
 	c64Pic          *ebiten.Image
 	flyingKickPic   *ebiten.Image
-	bleePic   *ebiten.Image
+	bleePic         *ebiten.Image
 	bigPicY             int
 	shiftX4             int
 	extraDelay          int
@@ -149,7 +149,7 @@ func drawRealBruceLee(screen *ebiten.Image, position float64) {
 func drawC64BruceLee(screen *ebiten.Image, position float64) {
     op := &ebiten.DrawImageOptions{}
     op.GeoM.Reset()
-    op.GeoM.Translate(2*position, 2*432) // 350 + 30
+    op.GeoM.Translate(2*position + 20, 2*432) // 350 + 30
     op.GeoM.Scale(0.5, 0.5)
     screen.DrawImage(bleePic, op)
 }
@@ -162,5 +162,4 @@ func drawAnimator(screen *ebiten.Image, x, y float64) {
 func drawC64(screen *ebiten.Image) {
     drawBackgroundScaled(screen, c64Pic, 0, 0, 1200, 722, 1)
 }
-
 

@@ -45,6 +45,8 @@ var (
     }
 
     gifAnimator [3]*GIFAnimator
+
+	enemiesPic      *ebiten.Image
 )
 
 func initStage3(){
@@ -56,7 +58,19 @@ func initStage3(){
             log.Fatal(err)
         }
     }
+    background2, err = loadImage("pics/brusli2.png")
+    if err != nil {
+        log.Fatal(err)
+    }
+    background, err = loadImage("pics/brusli.png")
+    if err != nil {
+        log.Fatal(err)
+    }
 
+    enemiesPic, err = loadImage("pics/enemies.png")
+    if err != nil {
+        log.Fatal(err)
+    }
 }
 
 func stage3(screen *ebiten.Image, counter float64){
@@ -86,6 +100,13 @@ func stage3(screen *ebiten.Image, counter float64){
     moveBackground(counter)
     moveProjectiles()
     moveDragon()
+
+    log.Println(counter)
+
+    enemiesPicCounterMin := 16950.0
+    if (counter > enemiesPicCounterMin && counter < 20390){
+        drawSquaredPic(screen, enemiesPic, 0, 900, counter- enemiesPicCounterMin)
+    }
 
     for i := range gifAnimator {
         gifAnimator[i].Update()
@@ -139,9 +160,7 @@ func moveBackground(counter float64) {
             if (shiftY < 350) {
                 shiftY += s
             }
-
     }
-
 }
 
 func moveProjectiles() {
@@ -171,3 +190,28 @@ func moveDragon(){
         dragons[i].y = 300*math.Sin(dragons[i].x/float64(400) + float64(i)*math.Pi) + 300
     }
 }
+
+func drawSquaredPic(screen *ebiten.Image,pic *ebiten.Image, x, y int, counter float64) {
+    picWidth := 1386.0
+    picHeight := 305.0
+    op := &ebiten.DrawImageOptions{}
+    op.GeoM.Translate(float64(x), float64(y))
+    op.GeoM.Scale(0.75, 0.75)
+    screen.DrawImage(pic, op)
+
+    centerX := float64(x) + picWidth/2
+    centerY := float64(y) + picHeight/2
+
+    squareWidth := int(math.Abs(float64(picWidth - counter))) + 1
+    squareHeight := int(math.Abs(float64(picHeight - counter))) + 1
+    blackSquare := ebiten.NewImage(squareWidth, squareHeight)
+    blackSquare.Fill(color.Black)
+
+    opSquare := &ebiten.DrawImageOptions{}
+    opSquare.GeoM.Translate(centerX, centerY)
+    opSquare.GeoM.Scale(0.75, 0.75)
+
+    screen.DrawImage(blackSquare, opSquare)
+    //log.Println("counter = ", counter);
+}
+
