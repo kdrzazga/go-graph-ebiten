@@ -16,7 +16,7 @@ var (
 	bigPic          *ebiten.Image
 	c64Pic          *ebiten.Image
 	flyingKickPic   *ebiten.Image
-	bleePic   *ebiten.Image
+	bleePic         *ebiten.Image
 	bigPicY             int
 	shiftX4             int
 	extraDelay          int
@@ -162,5 +162,4 @@ func drawAnimator(screen *ebiten.Image, x, y float64) {
 func drawC64(screen *ebiten.Image) {
     drawBackgroundScaled(screen, c64Pic, 0, 0, 1200, 722, 1)
 }
-
 

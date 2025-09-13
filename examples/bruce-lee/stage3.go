@@ -45,6 +45,8 @@ var (
     }
 
     gifAnimator [3]*GIFAnimator
+
+	enemiesPic      *ebiten.Image
 )
 
 func initStage3(){
@@ -56,7 +58,19 @@ func initStage3(){
             log.Fatal(err)
         }
     }
+    background2, err = loadImage("pics/brusli2.png")
+    if err != nil {
+        log.Fatal(err)
+    }
+    background, err = loadImage("pics/brusli.png")
+    if err != nil {
+        log.Fatal(err)
+    }
 
+    enemiesPic, err = loadImage("pics/enemies.png")
+    if err != nil {
+        log.Fatal(err)
+    }
 }
 
 func stage3(screen *ebiten.Image, counter float64){
@@ -86,6 +100,8 @@ func stage3(screen *ebiten.Image, counter float64){
     moveBackground(counter)
     moveProjectiles()
     moveDragon()
+
+    drawSquaredPic(screen, enemiesPic, 0, 0, counter- 6000)
 
     for i := range gifAnimator {
         gifAnimator[i].Update()
@@ -171,3 +187,28 @@ func moveDragon(){
         dragons[i].y = 300*math.Sin(dragons[i].x/float64(400) + float64(i)*math.Pi) + 300
     }
 }
+
+func drawSquaredPic(screen *ebiten.Image,pic *ebiten.Image, x, y int, counter float64) {
+    picWidth := 231.0
+    picHeight := 305.0
+    drawBackground(screen, pic, x, y, int(picWidth), int(picHeight))
+
+    //maxSize := 23
+    size := float64(50)
+    /*if size > float64(maxSize) {
+        size = float64(maxSize)
+    }*/
+
+    centerX := float64(x) + picWidth/2
+    centerY := float64(y) + picHeight/2
+
+    blackSquare := ebiten.NewImage(int(size), int(size))
+    blackSquare.Fill(color.White)
+
+    xS := centerX - size/2
+    yS := centerY - size/2
+
+    drawBackground(screen, blackSquare, int(4),int(1), int(size), int(size))
+    log.Println("counter = ", counter, " [", int(xS), int(yS),"]");
+}
+

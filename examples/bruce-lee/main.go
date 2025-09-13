@@ -76,14 +76,6 @@ func init() {
         log.Fatal(err)
     }
 
-    background2, err = loadImage("pics/brusli2.png")
-    if err != nil {
-        log.Fatal(err)
-    }
-    background, err = loadImage("pics/brusli.png")
-    if err != nil {
-        log.Fatal(err)
-    }
     pic1nun, err = loadImage("pics/bruce-lee-nunchako1.png")
     if err != nil {
         log.Fatal(err)
