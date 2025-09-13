@@ -101,7 +101,12 @@ func stage3(screen *ebiten.Image, counter float64){
     moveProjectiles()
     moveDragon()
 
-    drawSquaredPic(screen, enemiesPic, 0, 0, counter- 6000)
+    log.Println(counter)
+
+    enemiesPicCounterMin := 16950.0
+    if (counter > enemiesPicCounterMin && counter < 20390){
+        drawSquaredPic(screen, enemiesPic, 0, 900, counter- enemiesPicCounterMin)
+    }
 
     for i := range gifAnimator {
         gifAnimator[i].Update()
@@ -155,9 +160,7 @@ func moveBackground(counter float64) {
             if (shiftY < 350) {
                 shiftY += s
             }
-
     }
-
 }
 
 func moveProjectiles() {
@@ -189,26 +192,24 @@ func moveDragon(){
 }
 
 func drawSquaredPic(screen *ebiten.Image,pic *ebiten.Image, x, y int, counter float64) {
-    picWidth := 231.0
+    picWidth := 1386.0
     picHeight := 305.0
-    drawBackground(screen, pic, x, y, int(picWidth), int(picHeight))
-
-    //maxSize := 23
-    size := float64(50)
-    /*if size > float64(maxSize) {
-        size = float64(maxSize)
-    }*/
+    op := &ebiten.DrawImageOptions{}
+    op.GeoM.Translate(float64(x), float64(y))
+    op.GeoM.Scale(0.75, 0.75)
+    screen.DrawImage(pic, op)
 
     centerX := float64(x) + picWidth/2
     centerY := float64(y) + picHeight/2
 
-    blackSquare := ebiten.NewImage(int(size), int(size))
-    blackSquare.Fill(color.White)
+    blackSquare := ebiten.NewImage(int(picWidth - counter), int(picHeight - counter))
+    blackSquare.Fill(color.Black)
 
-    xS := centerX - size/2
-    yS := centerY - size/2
+    opSquare := &ebiten.DrawImageOptions{}
+    opSquare.GeoM.Translate(centerX, centerY)
+    opSquare.GeoM.Scale(0.75, 0.75)
 
-    drawBackground(screen, blackSquare, int(4),int(1), int(size), int(size))
-    log.Println("counter = ", counter, " [", int(xS), int(yS),"]");
+    screen.DrawImage(blackSquare, opSquare)
+    //log.Println("counter = ", counter);
 }
 
