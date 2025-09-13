@@ -9,8 +9,8 @@ import (
 )
 
 func main() {
-    inputPath := "source-dir/ohara3.bmp"
-    outputPath := "destination-dir/ohara4.bmp"
+    inputPath := "source-dir/chuck.bmp"
+    outputPath := "destination-dir/chuck2.bmp"
 
     infile, err := os.Open(inputPath)
     if err != nil {
@@ -58,5 +58,5 @@ func main() {
         return
     }
 
-    fmt.Println("Image doubled successfully.")
+    fmt.Println("Image doubled successfully: " + outputPath)
 }
