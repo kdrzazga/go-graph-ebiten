@@ -1,9 +1,9 @@
 package main
 
 import (
+	"runtime"
 	"image/color"
 	_ "image/jpeg"
-	"runtime"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/text/v2"

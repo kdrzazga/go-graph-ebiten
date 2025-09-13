@@ -202,7 +202,9 @@ func drawSquaredPic(screen *ebiten.Image,pic *ebiten.Image, x, y int, counter fl
     centerX := float64(x) + picWidth/2
     centerY := float64(y) + picHeight/2
 
-    blackSquare := ebiten.NewImage(int(picWidth - counter), int(picHeight - counter))
+    squareWidth := int(math.Abs(float64(picWidth - counter))) + 1
+    squareHeight := int(math.Abs(float64(picHeight - counter))) + 1
+    blackSquare := ebiten.NewImage(squareWidth, squareHeight)
     blackSquare.Fill(color.Black)
 
     opSquare := &ebiten.DrawImageOptions{}

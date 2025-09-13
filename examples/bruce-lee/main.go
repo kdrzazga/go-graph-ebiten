@@ -8,14 +8,13 @@ import (
 	"flag"
 	"log"
 	"os"
-	"runtime"
 
 	"github.com/hajimehoshi/ebiten/v2"
     "github.com/hajimehoshi/ebiten/v2/audio"
-    "github.com/hajimehoshi/ebiten/v2/audio/wav"
-	"github.com/hajimehoshi/ebiten/v2/examples/resources/fonts"
-	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/hajimehoshi/ebiten/v2/text/v2"
+    "github.com/hajimehoshi/ebiten/v2/audio/wav"
+	"github.com/hajimehoshi/ebiten/v2/inpututil"
+	"github.com/hajimehoshi/ebiten/v2/examples/resources/fonts"
 )
 
 var (
