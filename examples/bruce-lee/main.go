@@ -1,6 +1,7 @@
 package main
 
 import (
+    "runtime"
 	"bytes"
 	"image"
 	_ "image/jpeg"
@@ -59,6 +60,7 @@ const (
 )
 
 func init() {
+    ebiten.SetCursorMode(ebiten.CursorModeHidden)
 
     shiftX = 0
     shiftY = 0
