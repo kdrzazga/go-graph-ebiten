@@ -15,7 +15,7 @@
 package twenty48
 
 import (
-	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/kdrzazga/go-graph-ebiten/v2"
 )
 
 const (
