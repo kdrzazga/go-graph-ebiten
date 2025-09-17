@@ -1,4 +1,4 @@
-module github.com/hajimehoshi/ebiten/v2
+module github.com/kdrzazga/go-graph-ebiten/v2
 
 go 1.23.0
 
