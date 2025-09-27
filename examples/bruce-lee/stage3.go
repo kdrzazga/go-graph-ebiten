@@ -191,19 +191,24 @@ func moveDragon(){
     }
 }
 
-func drawSquaredPic(screen *ebiten.Image,pic *ebiten.Image, x, y int, counter float64) {
-    picWidth := 1386.0
-    picHeight := 305.0
+func drawSquaredPic(screen *ebiten.Image, pic *ebiten.Image, x, y int, counter float64) {
     op := &ebiten.DrawImageOptions{}
     op.GeoM.Translate(float64(x), float64(y))
     op.GeoM.Scale(0.75, 0.75)
     screen.DrawImage(pic, op)
 
+    //drawBlackSquare(screen, x, y, counter)
+}
+
+func drawBlackSquare(screen *ebiten.Image, x, y int, counter float64) {
+    picWidth := 1386.0
+    picHeight := 305.0
     centerX := float64(x) + picWidth/2
     centerY := float64(y) + picHeight/2
 
-    squareWidth := int(math.Abs(float64(picWidth - counter))) + 1
-    squareHeight := int(math.Abs(float64(picHeight - counter))) + 1
+    squareWidth := int(math.Abs(picWidth - counter)) + 1
+    squareHeight := int(math.Abs(picHeight - counter)) + 1
+
     blackSquare := ebiten.NewImage(squareWidth, squareHeight)
     blackSquare.Fill(color.Black)
 
@@ -212,6 +217,5 @@ func drawSquaredPic(screen *ebiten.Image,pic *ebiten.Image, x, y int, counter fl
     opSquare.GeoM.Scale(0.75, 0.75)
 
     screen.DrawImage(blackSquare, opSquare)
-    //log.Println("counter = ", counter);
 }
 
