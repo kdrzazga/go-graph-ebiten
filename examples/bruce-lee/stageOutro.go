@@ -27,7 +27,7 @@ func stageOutro(screen *ebiten.Image){
     screen.Fill(color.RGBA{R: 72, G: 58, B: 170, A: 255})
     outro(screen, stage4Counter)
 	drawBackground(screen, gameOverPic, 0, 0, 1583, 138)
-    stage4Counter +=2
+    stage4Counter +=1
 }
 
 func outro(screen *ebiten.Image, counter float64){
