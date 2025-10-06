@@ -11,7 +11,7 @@ import (
 var (
     err       error
     startTime time.Time
-    clock     []string
+    clock     string
     )
 
 type Game struct {
@@ -25,9 +25,8 @@ func (g *Game) Update() error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-        for _, line := range clock {
-            log.Println(line)
-        }
+
+    stage1clock(screen)
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
@@ -41,6 +40,8 @@ func init() {
     if err != nil {
         log.Fatal(err)
     }
+
+    initLib()
 }
 
 func main() {

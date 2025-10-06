@@ -1,30 +1,60 @@
 package main
 
 import (
-    "bufio"
     "os"
+    "log"
+    "bufio"
+    "bytes"
+	"image/color"
+	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/text/v2"
+	"github.com/hajimehoshi/ebiten/v2/examples/resources/fonts"
 )
 
-func readTextFile(filename string) ([]string, error) {
-    // Open the file
+var(
+	mplusFaceSource     *text.GoTextFaceSource
+)
+
+func initLib(){
+    s, err := text.NewGoTextFaceSource(bytes.NewReader(fonts.MPlus1pRegular_ttf))
+    	if err != nil {
+    		log.Fatal(err)
+    	}
+	mplusFaceSource = s
+}
+
+func readTextFile(filename string) (string, error) {
+
     file, err := os.Open(filename)
     if err != nil {
-        return nil, err
+        return "", err
     }
     defer file.Close()
 
-    var lines []string
+    var lines string
     scanner := bufio.NewScanner(file)
 
-    // Read line by line
     for scanner.Scan() {
-        lines = append(lines, scanner.Text())
+        lines += scanner.Text()
+        lines += "\n"
     }
 
-    // Check for scanner errors
     if err := scanner.Err(); err != nil {
-        return nil, err
+        return "", err
     }
 
     return lines, nil
+}
+
+func animateText(screen *ebiten.Image, msg string, size float64, x float64, y float64){
+	scale := ebiten.Monitor().DeviceScaleFactor()
+    textOp := &text.DrawOptions{}
+
+    textOp.GeoM.Translate(x, y)
+    textOp.ColorScale.ScaleWithColor(color.White)
+    textOp.LineSpacing = size * scale * 2
+    text.Draw(screen, msg, &text.GoTextFace{
+    	Source: mplusFaceSource,
+    	Size:   size * scale,
+    }, textOp)
 }
