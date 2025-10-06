@@ -52,7 +52,7 @@ func animateText(screen *ebiten.Image, msg string, size float64, x float64, y fl
 
     textOp.GeoM.Translate(x, y)
     textOp.ColorScale.ScaleWithColor(color.White)
-    textOp.LineSpacing = size * scale * 2
+    textOp.LineSpacing = size * scale * 1
     text.Draw(screen, msg, &text.GoTextFace{
     	Source: mplusFaceSource,
     	Size:   size * scale,
