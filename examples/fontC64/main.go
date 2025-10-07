@@ -122,7 +122,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
     purpleColor := color.RGBA{255, 5, 255, 255}
     greenColor := color.RGBA{5, 255, 5, 255}
     text.Draw(screen, caption2, fontFace2, 10, 100, whiteColor)
-    text.Draw(screen, caption, fontFace, 10, 150, cyanColor)
+    text.Draw(screen, caption, fontFace, -500 - g.X, 150, cyanColor)
     text.Draw(screen, captionShadow, fontFace, 5, 210, purpleColor)
     text.Draw(screen, captionEnjoy2, fontFace, g.X, 250, greenColor)
 }
