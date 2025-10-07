@@ -26,6 +26,7 @@ var (
     caption2  string
     captionShadow  string
     captionEnjoy2  string
+    X int
 )
 
 func createFont(fontPath string, size float64) (font.Face, error) {
@@ -102,11 +103,15 @@ func init() {
     if err != nil {
         log.Fatal(err)
     }
+
 }
 
-type Game struct{}
+type Game struct{
+    X int
+}
 
 func (g *Game) Update() error {
+    g.X--
     return nil
 }
 
@@ -119,7 +124,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
     text.Draw(screen, caption2, fontFace2, 10, 100, whiteColor)
     text.Draw(screen, caption, fontFace, 10, 150, cyanColor)
     text.Draw(screen, captionShadow, fontFace, 5, 210, purpleColor)
-    text.Draw(screen, captionEnjoy2, fontFace, 5, 250, greenColor)
+    text.Draw(screen, captionEnjoy2, fontFace, g.X, 250, greenColor)
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
@@ -127,9 +132,11 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 }
 
 func main() {
+    game := &Game{}
+    game.X = screenWidth
     ebiten.SetWindowSize(screenWidth, screenHeight)
     ebiten.SetWindowTitle("Caption Display")
-    if err := ebiten.RunGame(&Game{}); err != nil {
+    if err := ebiten.RunGame(game); err != nil {
         log.Fatal(err)
     }
 }
