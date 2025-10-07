@@ -1,8 +1,8 @@
 package main
 
 import (
-    "bufio"
     "io/ioutil"
+    "bufio"
     "image/color"
     "log"
     "os"
@@ -23,39 +23,59 @@ var (
     caption  string
 )
 
-func init() {
-    fontBytes, err := ioutil.ReadFile("C64ProMono.ttf")
+func createFont(fontPath string, size float64) (font.Face, error) {
+    fontBytes, err := ioutil.ReadFile(fontPath)
     if err != nil {
-        log.Fatal(err)
+        return nil, err
     }
     f, err := opentype.Parse(fontBytes)
     if err != nil {
-        log.Fatal(err)
+        return nil, err
     }
-    fontFace, err = opentype.NewFace(f, &opentype.FaceOptions{
-        Size:    24,
+    face, err := opentype.NewFace(f, &opentype.FaceOptions{
+        Size:    size,
         DPI:     72,
         Hinting: font.HintingFull,
     })
     if err != nil {
-        log.Fatal(err)
+        return nil, err
     }
-    file, err := os.Open("caption.txt")
+    return face, nil
+}
+
+func readCaption(filePath string) (string, error) {
+    file, err := os.Open(filePath)
     if err != nil {
-        log.Fatal(err)
+        return "", err
     }
     defer file.Close()
+
     scanner := bufio.NewScanner(file)
     var lines []string
     for scanner.Scan() {
         lines = append(lines, scanner.Text())
     }
     if err := scanner.Err(); err != nil {
-        log.Fatal(err)
+        return "", err
     }
-    caption = ""
+
+    caption := ""
     for _, line := range lines {
         caption += line + "\n"
+    }
+    return caption, nil
+}
+
+func init() {
+    var err error
+    fontFace, err = createFont("C64ProMono.ttf", 24)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    caption, err = readCaption("caption.txt")
+    if err != nil {
+        log.Fatal(err)
     }
 }
 
