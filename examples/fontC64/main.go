@@ -5,6 +5,7 @@ import (
     "bufio"
     "image/color"
     "strings"
+    "math"
     "log"
     "os"
 
@@ -26,6 +27,7 @@ var (
     caption2  string
     captionShadow  string
     captionEnjoy2  string
+    captionKnight  string
 )
 
 func createFont(fontPath string, size float64) (font.Face, error) {
@@ -76,7 +78,7 @@ func readCaption(filePath string) (string, error) {
 
 func init() {
     var (
-        err1, err2, err3, err4, err5, err6 error
+        err1, err2, err3, err4, err5, err6, err7 error
     )
 
     fontFace, err1 = createFont("C64ProMono.ttf", 7)
@@ -85,9 +87,10 @@ func init() {
     caption2, err4 = readCaption("caption.txt")
     captionShadow, err5 = readCaption("enjoy.txt")
     captionEnjoy2, err6 = readCaption("enjoy2.txt")
+    captionKnight, err7 = readCaption("knight.txt")
 
-    if err1 != nil || err2 != nil || err3 != nil || err4 != nil || err5 != nil || err6 != nil {
-        log.Fatalf("Error loading resources: %v %v %v %v %v %v", err1, err2, err3, err4, err5, err6)
+    if err1 != nil || err2 != nil || err3 != nil || err4 != nil || err5 != nil || err6 != nil || err7 != nil {
+        log.Fatalf("Error loading resources: %v %v %v %v %v %v", err1, err2, err3, err4, err5, err6, err7)
     }
 }
 
@@ -110,6 +113,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
     text.Draw(screen, caption, fontFace, -500 - g.X, 150, cyanColor)
     text.Draw(screen, captionShadow, fontFace, 5, 210, purpleColor)
     text.Draw(screen, captionEnjoy2, fontFace, g.X, 250, greenColor)
+    x := 100 + 100*math.Sin(float64(g.X)*float64(math.Pi)/float64(200))
+    text.Draw(screen, captionKnight, fontFace, int(x), 333, cyanColor)
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
