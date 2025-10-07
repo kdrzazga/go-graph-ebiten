@@ -140,7 +140,8 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 
 func main() {
     game := &Game{X : screenWidth}
-    ebiten.SetWindowSize(screenWidth, screenHeight)
+    //ebiten.SetWindowSize(screenWidth, screenHeight)
+    ebiten.SetFullscreen(true)
     ebiten.SetWindowTitle("Caption Display")
 
     knightImage, err := loadImage("knight.png")
