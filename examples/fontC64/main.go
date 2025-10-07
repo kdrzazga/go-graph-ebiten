@@ -4,6 +4,7 @@ import (
     "io/ioutil"
     "bufio"
     "image/color"
+	_ "image/png"
     "strings"
     "math"
     "log"
@@ -96,20 +97,36 @@ func init() {
 
 type Game struct{
     X int
+    knightImage *ebiten.Image
+    counter int
 }
 
 func (g *Game) Update() error {
     g.X--
+    g.counter++
+
+    if (g.counter > 2222){
+        reset(g)
+    }
     return nil
 }
 
+func reset(g *Game){
+    g.X = 0
+    g.counter = 0
+    log.Println("Animation reset")
+}
+
 func (g *Game) Draw(screen *ebiten.Image) {
+    op := &ebiten.DrawImageOptions{}
+    op.GeoM.Translate(900, 0)
+    screen.DrawImage(g.knightImage, op)
     //screen.Fill(nil)
-    whiteColor := color.RGBA{200, 200, 200, 255}
+    redColor := color.RGBA{255, 20, 20, 255}
     cyanColor := color.RGBA{5, 255, 255, 255}
     purpleColor := color.RGBA{255, 5, 255, 255}
     greenColor := color.RGBA{5, 255, 5, 255}
-    text.Draw(screen, caption2, fontFace2, 10, 100, whiteColor)
+    text.Draw(screen, caption2, fontFace2, 10, 100, redColor)
     text.Draw(screen, caption, fontFace, -500 - g.X, 150, cyanColor)
     text.Draw(screen, captionShadow, fontFace, 5, 210, purpleColor)
     text.Draw(screen, captionEnjoy2, fontFace, g.X, 250, greenColor)
@@ -125,6 +142,14 @@ func main() {
     game := &Game{X : screenWidth}
     ebiten.SetWindowSize(screenWidth, screenHeight)
     ebiten.SetWindowTitle("Caption Display")
+
+    knightImage, err := loadImage("knight.png")
+     if err  != nil {
+        log.Fatal(err)
+     }
+
+    game.knightImage = knightImage
+
     if err := ebiten.RunGame(game); err != nil {
         log.Fatal(err)
     }
