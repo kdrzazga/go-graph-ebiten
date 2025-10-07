@@ -113,7 +113,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
     text.Draw(screen, caption, fontFace, -500 - g.X, 150, cyanColor)
     text.Draw(screen, captionShadow, fontFace, 5, 210, purpleColor)
     text.Draw(screen, captionEnjoy2, fontFace, g.X, 250, greenColor)
-    x := 100 + 100*math.Sin(float64(g.X)*float64(math.Pi)/float64(200))
+    x := 200 + 200*math.Sin(float64(g.X)*float64(math.Pi)/float64(200))
     text.Draw(screen, captionKnight, fontFace, int(x), 333, cyanColor)
 }
 
