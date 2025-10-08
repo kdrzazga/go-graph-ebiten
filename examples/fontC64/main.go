@@ -1,19 +1,18 @@
 package main
 
 import (
-    "io/ioutil"
-    "bufio"
-    "image/color"
 	_ "image/png"
+    "image/color"
+    "io/ioutil"
     "strings"
+    "embed"
     "math"
     "log"
-    "os"
 
-    "github.com/hajimehoshi/ebiten/v2"
     "github.com/hajimehoshi/ebiten/v2/text"
-    "golang.org/x/image/font"
+    "github.com/hajimehoshi/ebiten/v2"
     "golang.org/x/image/font/opentype"
+    "golang.org/x/image/font"
 )
 
 const (
@@ -24,11 +23,13 @@ const (
 var (
     fontFace font.Face
     fontFace2 font.Face
-    caption  string
+    handwrite  string
     caption2  string
     captionShadow  string
     captionEnjoy2  string
     captionKnight  string
+    //go:embed knight.txt enjoy2.txt enjoy.txt caption.txt handwrite.txt
+    fileContent embed.FS
 )
 
 func createFont(fontPath string, size float64) (font.Face, error) {
@@ -52,27 +53,12 @@ func createFont(fontPath string, size float64) (font.Face, error) {
 }
 
 func readCaption(filePath string) (string, error) {
-    file, err := os.Open(filePath)
-    if err != nil {
-        return "", err
-    }
-    defer file.Close()
-
-    scanner := bufio.NewScanner(file)
-    var lines []string
-    for scanner.Scan() {
-        lines = append(lines, scanner.Text())
-    }
-    if err := scanner.Err(); err != nil {
-        return "", err
-    }
-
-    caption := ""
-    for _, line := range lines {
-        caption += line + "\n"
-    }
-
-    caption = strings.ReplaceAll(caption, ".", " ")
+    contentBytes, err := fileContent.ReadFile(filePath)
+        if err != nil {
+            log.Fatal(err)
+        }
+    content := string(contentBytes)
+    caption := strings.ReplaceAll(content, ".", " ")
 
     return caption, nil
 }
@@ -84,7 +70,7 @@ func init() {
 
     fontFace, err1 = createFont("C64ProMono.ttf", 7)
     fontFace2, err2 = createFont("C64ProMono.ttf", 72)
-    caption, err3 = readCaption("ascii-art.txt")
+    handwrite, err3 = readCaption("handwrite.txt")
     caption2, err4 = readCaption("caption.txt")
     captionShadow, err5 = readCaption("enjoy.txt")
     captionEnjoy2, err6 = readCaption("enjoy2.txt")
@@ -127,7 +113,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
     purpleColor := color.RGBA{255, 5, 255, 255}
     greenColor := color.RGBA{5, 255, 5, 255}
     text.Draw(screen, caption2, fontFace2, 10, 100, redColor)
-    text.Draw(screen, caption, fontFace, -500 - g.X, 150, cyanColor)
+    text.Draw(screen, handwrite, fontFace, -500 - g.X, 150, cyanColor)
     text.Draw(screen, captionShadow, fontFace, 5, 210, purpleColor)
     text.Draw(screen, captionEnjoy2, fontFace, g.X, 250, greenColor)
     x := 200 + 200*math.Sin(float64(g.X)*float64(math.Pi)/float64(200))
@@ -140,7 +126,8 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 
 func main() {
     game := &Game{X : screenWidth}
-    ebiten.SetWindowSize(screenWidth, screenHeight)
+    //ebiten.SetWindowSize(screenWidth, screenHeight)
+    ebiten.SetFullscreen(true)
     ebiten.SetWindowTitle("Caption Display")
 
     knightImage, err := loadImage("knight.png")
